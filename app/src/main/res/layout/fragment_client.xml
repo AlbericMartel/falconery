@@ -4,100 +4,88 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="clientViewModel"
             type="am.falconry.client.ClientViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".client.ClientFragment">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/newClientLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/clientName"
-                style="@style/formLabelStyle"
-                android:text="@string/clientName"
-                app:layout_constraintBaseline_toBaselineOf="@+id/clientNameEdit"
-                app:layout_constraintEnd_toStartOf="@+id/clientNameEdit"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <EditText
-                android:id="@+id/clientNameEdit"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/clientNameEditLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:inputType="textPersonName"
+                android:hint="@string/clientName"
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_weight="3"
-                app:layout_constraintStart_toEndOf="@+id/clientName"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="@={clientViewModel.client.name}"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/clientEmail"
-                style="@style/formLabelStyle"
-                android:text="@string/clientEmail"
-                app:layout_constraintBaseline_toBaselineOf="@+id/clientEmailEdit"
-                app:layout_constraintEnd_toStartOf="@+id/clientEmailEdit"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/clientNameEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="@={clientViewModel.client.name}" />
 
-            <EditText
-                android:id="@+id/clientEmailEdit"
-                android:layout_width="0dp"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/clientEmailEditLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:inputType="textEmailAddress"
+                android:hint="@string/clientEmail"
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/clientNameEdit"
-                app:layout_constraintTop_toBottomOf="@+id/clientNameEdit"
-                android:text="@={clientViewModel.client.email}"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clientNameEditLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/clientEmailEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:text="@={clientViewModel.client.email}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/clientLocations"
                 style="@style/formLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="32dp"
                 android:text="@string/clientLocations"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clientEmail" />
-
-            <Button
-                android:id="@+id/addLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/add_location"
-                android:onClick="@{() -> clientViewModel.newClientLocation()}"
-                app:layout_constraintStart_toEndOf="@+id/clientLocations"
-                app:layout_constraintTop_toBottomOf="@+id/clientEmailEdit" />
+                app:layout_constraintTop_toBottomOf="@+id/clientEmailEditLayout" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/locationsList"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:paddingTop="12dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@+id/saveClientButton"
+                app:layout_constraintBottom_toTopOf="@+id/cancelClientEdition"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clientLocations">
@@ -108,26 +96,49 @@
                 android:id="@+id/cancelClientEdition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/cancel"
+                android:layout_marginBottom="16dp"
                 android:onClick="@{() -> clientViewModel.cancel()}"
+                android:text="@string/cancel"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/saveClientButton"
-                app:layout_constraintTop_toBottomOf="@+id/locationsList"
-                tools:text="Annuler"/>
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Annuler" />
 
             <Button
                 android:id="@+id/saveClientButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/save"
                 android:onClick="@{() -> clientViewModel.save()}"
+                android:text="@string/save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/cancelClientEdition"
                 tools:text="Enregistrer" />
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="409dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toTopOf="@+id/locationsList"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addClient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginEnd="16dp"
+            android:onClick="@{() -> clientViewModel.newClientLocation()}"
+            app:srcCompat="@drawable/ic_plus_24"
+            app:layout_anchor="@+id/locationsList"
+            app:layout_anchorGravity="top|right|end"
+            app:fabSize="mini"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
