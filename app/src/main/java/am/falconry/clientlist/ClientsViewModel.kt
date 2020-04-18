@@ -23,6 +23,10 @@ class ClientsViewModel(
     val navigateToClient: LiveData<Long>
         get() = _navigateToClient
 
+    fun onNewClient() {
+        _navigateToClient.value = 0L
+    }
+
     fun onClientClicked(id: Long) {
         _navigateToClient.value = id
     }

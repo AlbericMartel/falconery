@@ -4,17 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="am.falconry.clientlist.ClientsViewModel" />
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/clientList"
-        android:name="am.falconry.clientlist.ClientsFragment"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".clientlist.ClientsFragment"
-        tools:listitem="@layout/client" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/clientList"
+            android:name="am.falconry.clientlist.ClientsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".clientlist.ClientsFragment"
+            tools:listitem="@layout/client" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addClient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:onClick="@{() -> viewModel.onNewClient()}"
+            app:srcCompat="@drawable/ic_plus_24" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
