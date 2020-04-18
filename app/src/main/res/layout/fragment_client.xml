@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="clientViewModel"
+            type="am.falconry.client.ClientViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".client.ClientFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/newClientLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/clientName"
+                style="@style/formLabelStyle"
+                android:text="@string/clientName"
+                app:layout_constraintBaseline_toBaselineOf="@+id/clientNameEdit"
+                app:layout_constraintEnd_toStartOf="@+id/clientNameEdit"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/clientNameEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="3"
+                app:layout_constraintStart_toEndOf="@+id/clientName"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@={clientViewModel.client.name}"/>
+
+            <TextView
+                android:id="@+id/clientEmail"
+                style="@style/formLabelStyle"
+                android:text="@string/clientEmail"
+                app:layout_constraintBaseline_toBaselineOf="@+id/clientEmailEdit"
+                app:layout_constraintEnd_toStartOf="@+id/clientEmailEdit"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/clientEmailEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/clientNameEdit"
+                app:layout_constraintTop_toBottomOf="@+id/clientNameEdit"
+                android:text="@={clientViewModel.client.email}"/>
+
+            <TextView
+                android:id="@+id/clientLocations"
+                style="@style/formLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="48dp"
+                android:text="@string/clientLocations"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clientEmail" />
+
+            <Button
+                android:id="@+id/addLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/add_location"
+                android:onClick="@{() -> clientViewModel.newClientLocation()}"
+                app:layout_constraintStart_toEndOf="@+id/clientLocations"
+                app:layout_constraintTop_toBottomOf="@+id/clientEmailEdit" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/locationsList"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toTopOf="@+id/saveClientButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clientLocations">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <Button
+                android:id="@+id/cancelClientEdition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/cancel"
+                android:onClick="@{() -> clientViewModel.cancel()}"
+                app:layout_constraintEnd_toStartOf="@+id/saveClientButton"
+                app:layout_constraintTop_toBottomOf="@+id/locationsList"
+                tools:text="Annuler"/>
+
+            <Button
+                android:id="@+id/saveClientButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/save"
+                android:onClick="@{() -> clientViewModel.save()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Enregistrer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>
