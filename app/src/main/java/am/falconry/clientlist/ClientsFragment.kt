@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 
 class ClientsFragment : Fragment() {
 
@@ -33,7 +34,9 @@ class ClientsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = ClientsAdapter()
+        val adapter = ClientsAdapter(ClientClickListener { clientId ->
+            viewModel.onClientClicked(clientId)
+        })
         binding.clientList.adapter = adapter
 
         viewModel.clients.observe(viewLifecycleOwner, Observer {
@@ -41,18 +44,17 @@ class ClientsFragment : Fragment() {
                 adapter.clients = it
             }
         })
-//        val view = inflater.inflate(R.layout.fragment_clients, container, false)
-//
-//        // Set the adapter
-//        if (view is RecyclerView) {
-//            with(view) {
-//                layoutManager = when {
-//                    columnCount <= 1 -> LinearLayoutManager(context)
-//                    else -> GridLayoutManager(context, columnCount)
-//                }
-//                adapter = ClientsAdapter(DummyContent.ITEMS, listener)
-//            }
-//        }
+
+        viewModel.navigateToClient.observe(viewLifecycleOwner, Observer { clientId ->
+            clientId?.let {
+                this.findNavController().navigate(
+                    ClientsFragmentDirections.actionClientsFragmentToNewClientFragment()
+                        .setClientId(clientId)
+                )
+                viewModel.onClientDetailNavigated()
+            }
+        })
+
         return binding.root
     }
 

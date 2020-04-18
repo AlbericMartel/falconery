@@ -19,9 +19,17 @@ class ClientsViewModel(
 
     val clients = database.getAllClients()
 
-    private val _navigateToClient = MutableLiveData<Boolean>()
-    val navigateToClient: LiveData<Boolean>
+    private val _navigateToClient = MutableLiveData<Long>()
+    val navigateToClient: LiveData<Long>
         get() = _navigateToClient
+
+    fun onClientClicked(id: Long) {
+        _navigateToClient.value = id
+    }
+
+    fun onClientDetailNavigated() {
+        _navigateToClient.value = null
+    }
 
     override fun onCleared() {
         super.onCleared()

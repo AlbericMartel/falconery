@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class ClientsAdapter(
+    val clickListener: ClientClickListener
 //    private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<ClientsAdapter.ViewHolder>() {
 
@@ -35,15 +36,16 @@ class ClientsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = clients[position]
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
     override fun getItemCount(): Int = clients.size
 
     class ViewHolder private constructor(val binding: ClientBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Client) {
+        fun bind(item: Client, clickListener: ClientClickListener) {
             binding.client = item
+            binding.card.setOnClickListener { clickListener.onClick(item) }
             binding.executePendingBindings()
         }
 
@@ -55,4 +57,8 @@ class ClientsAdapter(
             }
         }
     }
+}
+
+class ClientClickListener(val clickListener: (clientId: Long) -> Unit) {
+    fun onClick(client: Client) = clickListener(client.clientId)
 }
