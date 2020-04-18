@@ -20,9 +20,7 @@ class ClientViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var client = MutableLiveData<Client>()
-
-    var editableLocations = mutableListOf<Location>()
-    var locations = MutableLiveData<List<Location>>(editableLocations)
+    var locations = MutableLiveData<List<Location>>()
 
     private val _navigateToClientList = MutableLiveData<Boolean>()
     val navigateToClientList: LiveData<Boolean>
@@ -31,7 +29,7 @@ class ClientViewModel(
     init {
         uiScope.launch {
             client.value = loadClient(clientId)
-            editableLocations = loadLocations(clientId)
+            locations.value = loadLocations(clientId)
         }
     }
 
@@ -48,8 +46,9 @@ class ClientViewModel(
     }
 
     fun newClientLocation() {
-        editableLocations.add(Location()).also {
-            locations.value = editableLocations
+        val currentLocations: MutableList<Location>? = locations.value?.toMutableList()
+        currentLocations?.add(Location())?.also {
+            locations.value = currentLocations
         }
     }
 
@@ -84,7 +83,7 @@ class ClientViewModel(
     }
 
     private fun saveOrUpdateClientLocations(clientId: Long) {
-        editableLocations.forEach {
+        locations.value?.forEach {
             if (isLocationValid(it)) {
                 if (it.clientId != 0L) {
                     database.updateLocation(it)
