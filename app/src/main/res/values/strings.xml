@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Fauconnerie</string>
+    <string name="clientScreen">Client</string>
     <string name="newClient">Nouveau client</string>
     <string name="clientName">Nom</string>
     <string name="clientEmail">Email</string>
     <string name="clientLocations">Emplacements</string>
     <string name="save">Enregistrer</string>
-    <string name="add_location">Nouvel Emplacement</string>
     <string name="cancel">Annuler</string>
+    <string name="clientsScreen">Clients</string>
 </resources>
