@@ -24,5 +24,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Emplacement" />
+
+        <CheckBox
+            android:id="@+id/trapping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/locationText"
+            app:layout_constraintStart_toEndOf="@+id/locationText"
+            app:layout_constraintTop_toTopOf="parent"
+            android:checked="@={clientLocation.trapping}"
+            android:button="@drawable/ic_cage_24_toggle"/>
+
+        <CheckBox
+            android:id="@+id/scaring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/locationText"
+            app:layout_constraintStart_toEndOf="@+id/trapping"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            android:checked="@={clientLocation.scaring}"
+            android:button="@drawable/ic_eagle_24_toggle"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

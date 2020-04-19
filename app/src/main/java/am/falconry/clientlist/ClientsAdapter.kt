@@ -1,7 +1,6 @@
 package am.falconry.clientlist
 
 
-//import am.falconry.clientlist.ClientsFragment.OnListFragmentInteractionListener
 import am.falconry.database.client.Client
 import am.falconry.databinding.ClientBinding
 import android.view.LayoutInflater
@@ -9,8 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class ClientsAdapter(
-    val clickListener: ClientClickListener
-//    private val mListener: OnListFragmentInteractionListener?
+    private val clickListener: ClientClickListener
 ) : RecyclerView.Adapter<ClientsAdapter.ViewHolder>() {
 
     var clients = listOf<Client>()
@@ -18,17 +16,6 @@ class ClientsAdapter(
             field = value
             notifyDataSetChanged()
         }
-
-//    private val mOnClickListener: View.OnClickListener
-
-    init {
-//        mOnClickListener = View.OnClickListener { v ->
-//            val client = v.tag as Client
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-//            mListener?.onListFragmentInteraction(client)
-//        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)

@@ -22,7 +22,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class ClientLocationAdapter : RecyclerView.Adapter<ClientLocationAdapter.ViewHolder>() {
+class ClientLocationAdapter(
+    private val trappingClickListener: LocationOptionClickListener,
+    private val scaringClickListener: LocationOptionClickListener
+) : RecyclerView.Adapter<ClientLocationAdapter.ViewHolder>() {
 
     var data =  listOf<Location>()
         set(value) {
@@ -34,7 +37,7 @@ class ClientLocationAdapter : RecyclerView.Adapter<ClientLocationAdapter.ViewHol
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item)
+        holder.bind(item, trappingClickListener, scaringClickListener)
     }
 
 
@@ -44,8 +47,14 @@ class ClientLocationAdapter : RecyclerView.Adapter<ClientLocationAdapter.ViewHol
 
     class ViewHolder private constructor(val binding: ClientLocationBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Location) {
+        fun bind(item: Location, trappingClickListener: LocationOptionClickListener, scaringClickListener: LocationOptionClickListener) {
             binding.clientLocation = item
+            binding.trapping.setOnCheckedChangeListener { _, isChecked ->
+                trappingClickListener.onClick(item, isChecked)
+            }
+            binding.scaring.setOnCheckedChangeListener { _, isChecked ->
+                scaringClickListener.onClick(item, isChecked)
+            }
             binding.executePendingBindings()
         }
 
@@ -57,4 +66,8 @@ class ClientLocationAdapter : RecyclerView.Adapter<ClientLocationAdapter.ViewHol
             }
         }
     }
+}
+
+class LocationOptionClickListener(val clickListener: (locationId: Long, checked: Boolean) -> Unit) {
+    fun onClick(location: Location, checked: Boolean) = clickListener(location.locationId, checked)
 }

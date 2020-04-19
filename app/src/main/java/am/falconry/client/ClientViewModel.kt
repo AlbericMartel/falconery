@@ -113,6 +113,14 @@ class ClientViewModel(
         _navigateToClientList.value = null
     }
 
+    fun updateTrappingOption(locationId: Long, checked: Boolean) {
+        locations.value?.first { it.locationId == locationId }.also { it?.trapping = checked }
+    }
+
+    fun updateScaringOption(locationId: Long, checked: Boolean) {
+        locations.value?.first { it.locationId == locationId }.also { it?.scaring = checked }
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()

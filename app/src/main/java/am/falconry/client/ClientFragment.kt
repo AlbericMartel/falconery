@@ -27,12 +27,18 @@ class ClientFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
         val dataSource = FalconryDatabase.getInstance(application).clientDatabaseDao
         val viewModelFactory = ClientViewModelFactory(arguments.clientId, dataSource, application)
-        val clientViewModel = ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
+        val clientViewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
 
         binding.lifecycleOwner = this
         binding.clientViewModel = clientViewModel
 
-        val adapter = ClientLocationAdapter()
+        val adapter = ClientLocationAdapter(
+            LocationOptionClickListener { locationId, checked ->
+                clientViewModel.updateTrappingOption(locationId, checked)
+            }, LocationOptionClickListener { locationId, checked ->
+                clientViewModel.updateScaringOption(locationId, checked)
+            })
         binding.locationsList.adapter = adapter
 
         clientViewModel.locations.observe(viewLifecycleOwner, Observer {
@@ -43,7 +49,8 @@ class ClientFragment : Fragment() {
 
         clientViewModel.navigateToClientList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                this.findNavController().navigate(ClientFragmentDirections.actionNewClientFragmentToClientsFragment())
+                this.findNavController()
+                    .navigate(ClientFragmentDirections.actionNewClientFragmentToClientsFragment())
                 clientViewModel.doneNavigatingToClientList()
             }
         })
