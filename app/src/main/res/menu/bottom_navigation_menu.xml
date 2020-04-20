@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigateToClients"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/clientsScreen" />
+    <item
+        android:id="@+id/navigateToQuotes"
+        android:icon="@drawable/ic_assignment_black_24dp"
+        android:title="@string/quoteScreen" />
+</menu>
