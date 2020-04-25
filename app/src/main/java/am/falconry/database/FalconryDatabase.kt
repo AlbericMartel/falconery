@@ -19,10 +19,14 @@ package am.falconry.database
 import am.falconry.database.client.Client
 import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.Location
+import am.falconry.database.quote.Quote
+import am.falconry.database.quote.QuoteDatabaseDao
+import am.falconry.database.quote.QuoteIntervention
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 /**
  * A database that stores SleepNight information.
@@ -31,10 +35,12 @@ import androidx.room.RoomDatabase
  * This pattern is pretty much the same for any database,
  * so you can reuse it.
  */
-@Database(entities = [Client::class, Location::class], version = 1, exportSchema = false)
+@Database(entities = [Client::class, Location::class, Quote::class, QuoteIntervention::class], version = 1, exportSchema = false)
+@TypeConverters(am.falconry.database.quote.TypeConverters::class)
 abstract class FalconryDatabase : RoomDatabase() {
 
     abstract val clientDatabaseDao: ClientDatabaseDao
+    abstract val quoteDatabaseDao: QuoteDatabaseDao
 
     companion object {
         @Volatile

@@ -25,10 +25,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import org.hamcrest.Matchers
+import com.google.common.truth.Truth.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,21 +65,21 @@ class ClientDatabaseDaoTest {
         val createdClientId = clientDao.insertClient(client)
 
         val createdClient = clientDao.getClient(createdClientId)
-        assertEquals(client.name, createdClient?.name)
-        assertEquals(client.email, createdClient?.email)
+        assertThat(client.name).isEqualTo(createdClient?.name)
+        assertThat(client.email).isEqualTo(createdClient?.email)
 
         val savedClients = getValue(clientDao.getAllClients())
-        assertThat(savedClients.size, Matchers.equalTo(1))
-        assertEquals(client.name, savedClients[0].name)
-        assertEquals(client.email, savedClients[0].email)
+        assertThat(savedClients).hasSize(1)
+        assertThat(client.name).isEqualTo(savedClients[0].name)
+        assertThat(client.email).isEqualTo(savedClients[0].email)
 
         val updatedEmail = "email.updated"
         createdClient?.email = updatedEmail
         createdClient?.let { clientDao.updateClient(it) }
 
         val updatedClient = clientDao.getClient(createdClientId)
-        assertEquals(client.name, updatedClient?.name)
-        assertEquals(updatedEmail, updatedClient?.email)
+        assertThat(client.name).isEqualTo(updatedClient?.name)
+        assertThat(updatedEmail).isEqualTo(updatedClient?.email)
     }
 
     @Test
@@ -95,14 +93,14 @@ class ClientDatabaseDaoTest {
         val locationCreatedId = clientDao.insertLocation(location)
 
         val createdLocation = clientDao.getLocation(locationCreatedId)
-        assertEquals(location.name, createdLocation?.name)
-        assertEquals(location.trapping, createdLocation?.trapping)
-        assertEquals(location.scaring, createdLocation?.scaring)
+        assertThat(location.name).isEqualTo(createdLocation?.name)
+        assertThat(location.trapping).isEqualTo(createdLocation?.trapping)
+        assertThat(location.scaring).isEqualTo(createdLocation?.scaring)
 
         val savedLocations = clientDao.getAllClientLocations(client.clientId)
-        assertEquals(location.name, savedLocations[0].name)
-        assertEquals(location.trapping, savedLocations[0].trapping)
-        assertEquals(location.scaring, savedLocations[0].scaring)
+        assertThat(location.name).isEqualTo(savedLocations[0].name)
+        assertThat(location.trapping).isEqualTo(savedLocations[0].trapping)
+        assertThat(location.scaring).isEqualTo(savedLocations[0].scaring)
 
         createdLocation?.name = "anotherName"
         createdLocation?.trapping = false
@@ -110,9 +108,9 @@ class ClientDatabaseDaoTest {
         clientDao.updateLocation(createdLocation!!)
 
         val updatedLocation = clientDao.getLocation(createdLocation.locationId)
-        assertEquals(createdLocation.name, updatedLocation?.name)
-        assertEquals(createdLocation.trapping, updatedLocation?.trapping)
-        assertEquals(createdLocation.scaring, updatedLocation?.scaring)
+        assertThat(createdLocation.name).isEqualTo(updatedLocation?.name)
+        assertThat(createdLocation.trapping).isEqualTo(updatedLocation?.trapping)
+        assertThat(createdLocation.scaring).isEqualTo(updatedLocation?.scaring)
     }
 
     private fun defaultLocation(client: Client): Location {
