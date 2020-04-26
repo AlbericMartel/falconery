@@ -50,7 +50,7 @@ class ClientFragment : Fragment() {
         clientViewModel.navigateToClientList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 this.findNavController()
-                    .navigate(ClientFragmentDirections.actionNewClientFragmentToClientsFragment())
+                    .navigate(ClientFragmentDirections.actionNewClientFragmentToHomeViewPagerFragment())
                 clientViewModel.doneNavigatingToClientList()
             }
         })

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/clientsFragment">
+    app:startDestination="@id/homeViewPagerFragment">
 
     <fragment
         android:id="@+id/newClientFragment"
@@ -15,15 +15,15 @@
             app:argType="long"
             android:defaultValue="0L" />
         <action
-            android:id="@+id/action_newClientFragment_to_clientsFragment"
-            app:destination="@id/clientsFragment" />
+            android:id="@+id/action_newClientFragment_to_homeViewPagerFragment"
+            app:destination="@id/homeViewPagerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/clientsFragment"
-        android:name="am.falconry.clientlist.ClientsFragment"
-        android:label="@string/clientsScreen" >
+        android:id="@+id/homeViewPagerFragment"
+        android:name="am.falconry.HomeViewPagerFragment"
+        android:label="HomeViewPagerFragment" >
         <action
-            android:id="@+id/action_clientsFragment_to_newClientFragment"
+            android:id="@+id/action_homeViewPagerFragment_to_newClientFragment"
             app:destination="@id/newClientFragment" />
     </fragment>
 </navigation>

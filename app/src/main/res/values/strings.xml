@@ -8,5 +8,8 @@
     <string name="save">Enregistrer</string>
     <string name="cancel">Annuler</string>
     <string name="clientsScreen">Clients</string>
-    <string name="quoteScreen">Devis</string>
+    <string name="quotesScreen">Devis</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
