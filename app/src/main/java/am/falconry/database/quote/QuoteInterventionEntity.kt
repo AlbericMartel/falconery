@@ -1,6 +1,6 @@
 package am.falconry.database.quote
 
-import am.falconry.database.client.Location
+import am.falconry.database.client.LocationEntity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
@@ -11,20 +11,20 @@ import java.time.LocalDate
     tableName = "quote_intervention",
     foreignKeys = [
         ForeignKey(
-            entity = Quote::class,
+            entity = QuoteEntity::class,
             parentColumns = ["quoteId"],
             childColumns = ["quoteId"],
             onDelete = CASCADE
         ),
         ForeignKey(
-            entity = Location::class,
+            entity = LocationEntity::class,
             parentColumns = ["locationId"],
             childColumns = ["locationId"],
             onDelete = CASCADE
         )
     ]
 )
-data class QuoteIntervention(
+data class QuoteInterventionEntity(
     @PrimaryKey(autoGenerate = true)
     var interventionId: Long = 0L,
 

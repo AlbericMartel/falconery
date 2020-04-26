@@ -1,6 +1,6 @@
 package am.falconry.database.quote
 
-import am.falconry.database.client.Client
+import am.falconry.database.client.ClientEntity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -9,13 +9,13 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "quote",
     foreignKeys = [
         ForeignKey(
-            entity = Client::class,
+            entity = ClientEntity::class,
             parentColumns = ["clientId"],
             childColumns = ["clientId"],
             onDelete = ForeignKey.CASCADE
         )
     ])
-data class Quote(
+data class QuoteEntity(
     @PrimaryKey(autoGenerate = true)
     var quoteId: Long = 0L,
 

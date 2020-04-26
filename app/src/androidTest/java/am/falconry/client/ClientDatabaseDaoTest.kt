@@ -17,9 +17,9 @@
 package am.falconry.client
 
 import am.falconry.database.FalconryDatabase
-import am.falconry.database.client.Client
 import am.falconry.database.client.ClientDatabaseDao
-import am.falconry.database.client.Location
+import am.falconry.database.client.ClientEntity
+import am.falconry.database.client.LocationEntity
 import am.falconry.utils.getValue
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -113,8 +113,8 @@ class ClientDatabaseDaoTest {
         assertThat(createdLocation.scaring).isEqualTo(updatedLocation?.scaring)
     }
 
-    private fun defaultLocation(client: Client): Location {
-        val location = Location()
+    private fun defaultLocation(client: ClientEntity): LocationEntity {
+        val location = LocationEntity()
         location.clientId = client.clientId
         location.name = "location"
         location.trapping = true
@@ -123,8 +123,8 @@ class ClientDatabaseDaoTest {
         return location
     }
 
-    private fun defaultClient(): Client {
-        val client = Client()
+    private fun defaultClient(): ClientEntity {
+        val client = ClientEntity()
         client.name = "Name"
         client.email = "email"
 

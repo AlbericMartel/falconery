@@ -9,14 +9,14 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "location",
         foreignKeys = [
                 ForeignKey(
-                        entity = Client::class,
+                        entity = ClientEntity::class,
                         parentColumns = ["clientId"],
                         childColumns = ["clientId"],
                         onDelete = CASCADE
                 )
         ]
 )
-data class Location(
+data class LocationEntity(
         @PrimaryKey(autoGenerate = true)
         var locationId: Long = 0L,
 

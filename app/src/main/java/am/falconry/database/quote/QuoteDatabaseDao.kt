@@ -7,14 +7,14 @@ import androidx.room.*
 interface QuoteDatabaseDao {
 
     @Insert
-    fun insertQuote(quote: Quote): Long
+    fun insertQuote(quote: QuoteEntity): Long
 
     @Update
-    fun updateQuote(quote: Quote)
+    fun updateQuote(quote: QuoteEntity)
 
     @Transaction
     @Query("SELECT * from quote WHERE quoteId = :quoteId")
-    fun getQuote(quoteId: Long): LiveData<QuoteWithInterventions?>
+    fun getQuote(quoteId: Long): QuoteWithInterventions?
 
     @Transaction
     @Query("SELECT * FROM quote where clientId = :clientId")
@@ -25,11 +25,11 @@ interface QuoteDatabaseDao {
     fun getAllQuotes(): LiveData<List<QuoteWithInterventions>>
 
     @Insert
-    fun insertQuoteIntervention(intervention: QuoteIntervention): Long
+    fun insertQuoteIntervention(intervention: QuoteInterventionEntity): Long
 
     @Update
-    fun updateQuoteIntervention(intervention: QuoteIntervention)
+    fun updateQuoteIntervention(intervention: QuoteInterventionEntity)
 
     @Query("SELECT * FROM quote_intervention WHERE quoteId = :quoteId ORDER BY date DESC")
-    fun getQuoteInterventions(quoteId: Long): LiveData<List<QuoteIntervention>>
+    fun getQuoteInterventions(quoteId: Long): LiveData<List<QuoteInterventionEntity>>
 }

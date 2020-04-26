@@ -1,8 +1,8 @@
 package am.falconry.client
 
-import am.falconry.database.client.Client
+import am.falconry.database.client.ClientEntity
 import am.falconry.database.client.ClientDatabaseDao
-import am.falconry.database.client.Location
+import am.falconry.database.client.LocationEntity
 import android.app.Application
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
@@ -19,8 +19,8 @@ class ClientViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var client = MutableLiveData<Client>()
-    var locations = MutableLiveData<List<Location>>()
+    var client = MutableLiveData<ClientEntity>()
+    var locations = MutableLiveData<List<LocationEntity>>()
 
     private val _navigateToClientList = MutableLiveData<Boolean>()
     val navigateToClientList: LiveData<Boolean>
@@ -33,21 +33,21 @@ class ClientViewModel(
         }
     }
 
-    private suspend fun loadClient(clientId: Long): Client {
+    private suspend fun loadClient(clientId: Long): ClientEntity {
         return withContext(Dispatchers.IO) {
-            database.getClient(clientId) ?: Client()
+            database.getClient(clientId) ?: ClientEntity()
         }
     }
 
-    private suspend fun loadLocations(clientId: Long): MutableList<Location> {
+    private suspend fun loadLocations(clientId: Long): MutableList<LocationEntity> {
         return withContext(Dispatchers.IO) {
             database.getAllClientLocations(clientId).toMutableList()
         }
     }
 
     fun newClientLocation() {
-        val currentLocations: MutableList<Location>? = locations.value?.toMutableList()
-        currentLocations?.add(Location())?.also {
+        val currentLocations: MutableList<LocationEntity>? = locations.value?.toMutableList()
+        currentLocations?.add(LocationEntity())?.also {
             locations.value = currentLocations
         }
     }
@@ -105,7 +105,7 @@ class ClientViewModel(
         return false
     }
 
-    private fun isLocationValid(location: Location): Boolean {
+    private fun isLocationValid(location: LocationEntity): Boolean {
         return location.name.isNotBlank()
     }
 

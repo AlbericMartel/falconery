@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "client")
-data class Client(
+data class ClientEntity(
         @PrimaryKey(autoGenerate = true)
         var clientId: Long = 0L,
 

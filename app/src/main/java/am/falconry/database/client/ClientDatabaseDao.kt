@@ -10,26 +10,26 @@ import androidx.room.Update
 interface ClientDatabaseDao {
 
     @Insert
-    fun insertClient(client: Client): Long
+    fun insertClient(client: ClientEntity): Long
 
     @Update
-    fun updateClient(client: Client)
+    fun updateClient(client: ClientEntity)
 
     @Query("SELECT * from client WHERE clientId = :clientId")
-    fun getClient(clientId: Long): Client?
+    fun getClient(clientId: Long): ClientEntity?
 
     @Query("SELECT * FROM client ORDER BY name DESC")
-    fun getAllClients(): LiveData<List<Client>>
+    fun getAllClients(): LiveData<List<ClientEntity>>
 
     @Insert
-    fun insertLocation(location: Location): Long
+    fun insertLocation(location: LocationEntity): Long
 
     @Update
-    fun updateLocation(location: Location)
+    fun updateLocation(location: LocationEntity)
 
     @Query("SELECT * from location WHERE locationId = :locationId")
-    fun getLocation(locationId: Long): Location?
+    fun getLocation(locationId: Long): LocationEntity?
 
     @Query("SELECT * FROM location WHERE clientId = :clientId ORDER BY name DESC")
-    fun getAllClientLocations(clientId: Long): List<Location>
+    fun getAllClientLocations(clientId: Long): List<LocationEntity>
 }

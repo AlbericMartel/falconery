@@ -17,12 +17,12 @@
 package am.falconry.quote
 
 import am.falconry.database.FalconryDatabase
-import am.falconry.database.client.Client
 import am.falconry.database.client.ClientDatabaseDao
-import am.falconry.database.client.Location
-import am.falconry.database.quote.Quote
+import am.falconry.database.client.ClientEntity
+import am.falconry.database.client.LocationEntity
 import am.falconry.database.quote.QuoteDatabaseDao
-import am.falconry.database.quote.QuoteIntervention
+import am.falconry.database.quote.QuoteEntity
+import am.falconry.database.quote.QuoteInterventionEntity
 import am.falconry.utils.getValue
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -72,7 +72,7 @@ class QuoteDatabaseDaoTest {
         val now = LocalDate.now()
         val interventionId = quoteDao.insertQuoteIntervention(quoteIntervention(quoteId, locationId, now))
 
-        val quote = getValue(quoteDao.getQuote(quoteId))
+        val quote = quoteDao.getQuote(quoteId)
         assertQuote(quote?.quote, quoteId, true)
         assertQuoteIntervention(quote!!.interventions, quoteId, interventionId, locationId, now)
     }
@@ -86,11 +86,11 @@ class QuoteDatabaseDaoTest {
         val now = LocalDate.now()
         val interventionId = quoteDao.insertQuoteIntervention(quoteIntervention(quoteId, locationId, now))
 
-        val quote = getValue(quoteDao.getAllQuotes())
-        assertThat(quote).isNotNull()
-        assertThat(quote).hasSize(1)
-        assertQuote(quote[0].quote, quoteId, true)
-        assertQuoteIntervention(quote[0].interventions, quoteId, interventionId, locationId, now)
+        val quotes = getValue(quoteDao.getAllQuotes())
+        assertThat(quotes).isNotNull()
+        assertThat(quotes).hasSize(1)
+        assertQuote(quotes[0].quote, quoteId, true)
+        assertQuoteIntervention(quotes[0].interventions, quoteId, interventionId, locationId, now)
     }
 
     @Test
@@ -102,11 +102,11 @@ class QuoteDatabaseDaoTest {
         val now = LocalDate.now()
         val interventionId = quoteDao.insertQuoteIntervention(quoteIntervention(quoteId, locationId, now))
 
-        val quote = getValue(quoteDao.getAllQuotesForClient(clientId))
-        assertThat(quote).isNotNull()
-        assertThat(quote).hasSize(1)
-        assertQuote(quote[0].quote, quoteId, true)
-        assertQuoteIntervention(quote[0].interventions, quoteId, interventionId, locationId, now)
+        val quotes = getValue(quoteDao.getAllQuotesForClient(clientId))
+        assertThat(quotes).isNotNull()
+        assertThat(quotes).hasSize(1)
+        assertQuote(quotes[0].quote, quoteId, true)
+        assertQuoteIntervention(quotes[0].interventions, quoteId, interventionId, locationId, now)
     }
 
     @Test
@@ -115,12 +115,12 @@ class QuoteDatabaseDaoTest {
         val clientId = clientDao.insertClient(defaultClient())
         val quoteId = quoteDao.insertQuote(defaultQuote(clientId))
 
-        val quote = getValue(quoteDao.getQuote(quoteId))
+        val quote = quoteDao.getQuote(quoteId)
 
         quote!!.quote.onGoing = false
         quoteDao.updateQuote(quote.quote)
 
-        val updatedQuote = getValue(quoteDao.getQuote(quoteId))
+        val updatedQuote = quoteDao.getQuote(quoteId)
         assertThat(updatedQuote).isNotNull()
         assertQuote(updatedQuote?.quote, quoteId, false)
     }
@@ -134,7 +134,7 @@ class QuoteDatabaseDaoTest {
         val now = LocalDate.now()
         val interventionId = quoteDao.insertQuoteIntervention(quoteIntervention(quoteId, locationId, now))
 
-        val quote = getValue(quoteDao.getQuote(quoteId))
+        val quote = quoteDao.getQuote(quoteId)
 
         val updatedDate = LocalDate.now()
         quote!!.interventions[0].date = updatedDate
@@ -145,14 +145,14 @@ class QuoteDatabaseDaoTest {
         assertQuoteIntervention(updatedQuote, quoteId, interventionId, locationId, updatedDate)
     }
 
-    private fun assertQuote(quote: Quote?, quoteId: Long, isOnGoing: Boolean) {
+    private fun assertQuote(quote: QuoteEntity?, quoteId: Long, isOnGoing: Boolean) {
         assertThat(quote).isNotNull();
         assertThat(quote?.quoteId).isEqualTo(quoteId)
         assertThat(quote?.onGoing).isEqualTo(isOnGoing)
     }
 
     private fun assertQuoteIntervention(
-        interventions: List<QuoteIntervention>,
+        interventions: List<QuoteInterventionEntity>,
         quoteId: Long,
         interventionId: Long,
         locationId: Long,
@@ -166,16 +166,16 @@ class QuoteDatabaseDaoTest {
         assertThat(interventions[0].date).isEqualTo(date)
     }
 
-    private fun defaultClient(): Client {
-        val client = Client()
+    private fun defaultClient(): ClientEntity {
+        val client = ClientEntity()
         client.name = "Name"
         client.email = "email"
 
         return client
     }
 
-    private fun defaultLocation(client: Client): Location {
-        val location = Location()
+    private fun defaultLocation(client: ClientEntity): LocationEntity {
+        val location = LocationEntity()
         location.clientId = client.clientId
         location.name = "location"
         location.trapping = true
@@ -184,16 +184,16 @@ class QuoteDatabaseDaoTest {
         return location
     }
 
-    private fun defaultQuote(clientId: Long): Quote {
-        val quote = Quote()
+    private fun defaultQuote(clientId: Long): QuoteEntity {
+        val quote = QuoteEntity()
         quote.clientId = clientId
         quote.onGoing = true
 
         return quote
     }
 
-    private fun quoteIntervention(quoteId: Long, locationId: Long, date: LocalDate): QuoteIntervention {
-        val intervention = QuoteIntervention()
+    private fun quoteIntervention(quoteId: Long, locationId: Long, date: LocalDate): QuoteInterventionEntity {
+        val intervention = QuoteInterventionEntity()
         intervention.quoteId = quoteId
         intervention.locationId = locationId
         intervention.date = date

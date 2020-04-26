@@ -16,7 +16,7 @@
 
 package am.falconry.client
 
-import am.falconry.database.client.Location
+import am.falconry.database.client.LocationEntity
 import am.falconry.databinding.ClientLocationBinding
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -27,7 +27,7 @@ class ClientLocationAdapter(
     private val scaringClickListener: LocationOptionClickListener
 ) : RecyclerView.Adapter<ClientLocationAdapter.ViewHolder>() {
 
-    var data =  listOf<Location>()
+    var data =  listOf<LocationEntity>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -47,7 +47,7 @@ class ClientLocationAdapter(
 
     class ViewHolder private constructor(val binding: ClientLocationBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Location, trappingClickListener: LocationOptionClickListener, scaringClickListener: LocationOptionClickListener) {
+        fun bind(item: LocationEntity, trappingClickListener: LocationOptionClickListener, scaringClickListener: LocationOptionClickListener) {
             binding.clientLocation = item
             binding.trapping.setOnCheckedChangeListener { _, isChecked ->
                 trappingClickListener.onClick(item, isChecked)
@@ -69,5 +69,5 @@ class ClientLocationAdapter(
 }
 
 class LocationOptionClickListener(val clickListener: (locationId: Long, checked: Boolean) -> Unit) {
-    fun onClick(location: Location, checked: Boolean) = clickListener(location.locationId, checked)
+    fun onClick(location: LocationEntity, checked: Boolean) = clickListener(location.locationId, checked)
 }

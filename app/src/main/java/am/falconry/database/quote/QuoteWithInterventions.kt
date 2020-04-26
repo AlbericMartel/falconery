@@ -4,8 +4,8 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class QuoteWithInterventions(
-    @Embedded val quote: Quote,
+    @Embedded val quote: QuoteEntity,
 
     @Relation(parentColumn = "quoteId", entityColumn = "quoteId")
-    val interventions: List<QuoteIntervention>
+    val interventions: List<QuoteInterventionEntity>
 )
