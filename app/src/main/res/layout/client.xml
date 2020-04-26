@@ -5,7 +5,7 @@
     <data>
         <variable
             name="client"
-            type="am.falconry.database.client.ClientEntity" />
+            type="am.falconry.domain.Client" />
     </data>
 
     <LinearLayout

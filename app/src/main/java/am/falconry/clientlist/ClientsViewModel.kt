@@ -1,6 +1,6 @@
 package am.falconry.clientlist
 
-import am.falconry.database.client.ClientDatabaseDao
+import am.falconry.database.client.ClientRepository
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -10,14 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 class ClientsViewModel(
-    val database: ClientDatabaseDao,
+    repository: ClientRepository,
     application: Application
 ) : AndroidViewModel(application) {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val clients = database.getAllClients()
+    val clients = repository.getAllClients()
 
     private val _navigateToClient = MutableLiveData<Long>()
     val navigateToClient: LiveData<Long>

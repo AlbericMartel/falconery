@@ -9,14 +9,14 @@ import androidx.lifecycle.Transformations
 
 class QuoteRepository(database: FalconryDatabase) {
 
-    private val quoteDatabaseDao = database.quoteDatabaseDao
-    private val clientDatabaseDao = database.clientDatabaseDao
+    private val quoteDao = database.quoteDatabaseDao
+    private val clientDao = database.clientDatabaseDao
 
     fun getAllQuotes(): LiveData<List<Quote>> {
-        val allQuotes = quoteDatabaseDao.getAllQuotes()
+        val allQuotes = quoteDao.getAllQuotes()
         return Transformations.map(allQuotes) { quote ->
             quote.map {
-                val client = clientDatabaseDao.getClient(it.quote.clientId)
+                val client = clientDao.getClient(it.quote.clientId)
                 val interventions = toDomainModel(it.interventions)
                 toDomainModel(it.quote, client!!, interventions)
             }
@@ -25,7 +25,7 @@ class QuoteRepository(database: FalconryDatabase) {
 
     private fun toDomainModel(interventions: List<QuoteInterventionEntity>): List<QuoteIntervention> {
         return interventions.map { quoteIntervention ->
-            val location = clientDatabaseDao.getLocation(quoteIntervention.locationId)
+            val location = clientDao.getLocation(quoteIntervention.locationId)
 
             QuoteIntervention(quoteIntervention.interventionId, location!!.locationId, location.name)
         }

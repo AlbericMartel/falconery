@@ -1,8 +1,8 @@
 package am.falconry.clientlist
 
 
-import am.falconry.database.client.ClientEntity
 import am.falconry.databinding.ClientBinding
+import am.falconry.domain.Client
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +11,7 @@ class ClientsAdapter(
     private val clickListener: ClientClickListener
 ) : RecyclerView.Adapter<ClientsAdapter.ViewHolder>() {
 
-    var clients = listOf<ClientEntity>()
+    var clients = listOf<Client>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -30,7 +30,7 @@ class ClientsAdapter(
 
     class ViewHolder private constructor(val binding: ClientBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: ClientEntity, clickListener: ClientClickListener) {
+        fun bind(item: Client, clickListener: ClientClickListener) {
             binding.client = item
             binding.card.setOnClickListener { clickListener.onClick(item) }
             binding.executePendingBindings()
@@ -47,5 +47,5 @@ class ClientsAdapter(
 }
 
 class ClientClickListener(val clickListener: (clientId: Long) -> Unit) {
-    fun onClick(client: ClientEntity) = clickListener(client.clientId)
+    fun onClick(client: Client) = clickListener(client.clientId)
 }

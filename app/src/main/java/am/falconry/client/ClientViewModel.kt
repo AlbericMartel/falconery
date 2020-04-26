@@ -1,8 +1,8 @@
 package am.falconry.client
 
-import am.falconry.database.client.ClientEntity
-import am.falconry.database.client.ClientDatabaseDao
-import am.falconry.database.client.LocationEntity
+import am.falconry.database.client.ClientRepository
+import am.falconry.domain.Client
+import am.falconry.domain.Location
 import android.app.Application
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
@@ -12,15 +12,15 @@ import kotlinx.coroutines.*
 
 class ClientViewModel(
     private val clientId: Long = 0L,
-    val database: ClientDatabaseDao,
+    private val repository: ClientRepository,
     application: Application
 ) : AndroidViewModel(application) {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var client = MutableLiveData<ClientEntity>()
-    var locations = MutableLiveData<List<LocationEntity>>()
+    var client = MutableLiveData<Client>()
+    var locations = MutableLiveData<List<Location>>()
 
     private val _navigateToClientList = MutableLiveData<Boolean>()
     val navigateToClientList: LiveData<Boolean>
@@ -33,30 +33,30 @@ class ClientViewModel(
         }
     }
 
-    private suspend fun loadClient(clientId: Long): ClientEntity {
+    private suspend fun loadClient(clientId: Long): Client {
         return withContext(Dispatchers.IO) {
-            database.getClient(clientId) ?: ClientEntity()
+            repository.getClient(clientId)
         }
     }
 
-    private suspend fun loadLocations(clientId: Long): MutableList<LocationEntity> {
+    private suspend fun loadLocations(clientId: Long): MutableList<Location> {
         return withContext(Dispatchers.IO) {
-            database.getAllClientLocations(clientId).toMutableList()
+            repository.getClientLocations(clientId).toMutableList()
         }
     }
 
     fun newClientLocation() {
-        val currentLocations: MutableList<LocationEntity>? = locations.value?.toMutableList()
-        currentLocations?.add(LocationEntity())?.also {
+        val currentLocations: MutableList<Location>? = locations.value?.toMutableList()
+        currentLocations?.add(repository.newLocation())?.also {
             locations.value = currentLocations
         }
     }
 
-    fun save() {
+    fun trySaveClient() {
         if (isClientValid()) {
             uiScope.launch {
                 withContext(Dispatchers.IO) {
-                    saveClientAndLocations()
+                    saveClient()
                 }
             }
             _navigateToClientList.value = true
@@ -67,31 +67,13 @@ class ClientViewModel(
         _navigateToClientList.value = true
     }
 
-    private fun saveClientAndLocations() {
-        with(client.value) {
-            this?.let {
-                var clientId = it.clientId
-                if (clientId != 0L) {
-                    database.updateClient(it)
-                } else {
-                    clientId = database.insertClient(it)
-                }
+    private fun saveClient() {
+        if (client.value == null) return
 
-                saveOrUpdateClientLocations(clientId)
-            }
-        }
-    }
-
-    private fun saveOrUpdateClientLocations(clientId: Long) {
-        locations.value?.forEach {
-            if (isLocationValid(it)) {
-                if (it.clientId != 0L) {
-                    database.updateLocation(it)
-                } else {
-                    it.clientId = clientId
-                    database.insertLocation(it)
-                }
-            }
+        val areAllLocationsValid = locations.value?.all { location -> isLocationValid(location) } ?: true
+        if (areAllLocationsValid) {
+            val updatedLocations = locations.value ?: listOf()
+            repository.saveClient(client.value!!, updatedLocations)
         }
     }
 
@@ -105,7 +87,7 @@ class ClientViewModel(
         return false
     }
 
-    private fun isLocationValid(location: LocationEntity): Boolean {
+    private fun isLocationValid(location: Location): Boolean {
         return location.name.isNotBlank()
     }
 

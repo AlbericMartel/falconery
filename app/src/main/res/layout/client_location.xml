@@ -6,7 +6,7 @@
     <data>
         <variable
             name="clientLocation"
-            type="am.falconry.database.client.LocationEntity" />
+            type="am.falconry.domain.Location" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,6 +2,7 @@ package am.falconry.client
 
 import am.falconry.R
 import am.falconry.database.FalconryDatabase
+import am.falconry.database.client.ClientRepository
 import am.falconry.databinding.FragmentClientBinding
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,8 +26,8 @@ class ClientFragment : Fragment() {
 
         val binding: FragmentClientBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
-        val dataSource = FalconryDatabase.getInstance(application).clientDatabaseDao
-        val viewModelFactory = ClientViewModelFactory(arguments.clientId, dataSource, application)
+        val repository = ClientRepository(FalconryDatabase.getInstance(application))
+        val viewModelFactory = ClientViewModelFactory(arguments.clientId, repository, application)
         val clientViewModel =
             ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
 
