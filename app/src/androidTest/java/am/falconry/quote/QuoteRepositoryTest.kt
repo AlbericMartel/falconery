@@ -68,6 +68,41 @@ class QuoteRepositoryTest {
 
     @Test
     @Throws(Exception::class)
+    fun shouldGetNewQuoteWhenNotExistingQuoteId() {
+        val quote = quoteRepository.getQuote(123)
+
+        assertThat(quote).isNotNull()
+        assertThat(quote.quoteId).isEqualTo(0L)
+        assertThat(quote.onGoing).isFalse()
+        assertThat(quote.clientName).isEqualTo("")
+        val interventions = quote.interventions
+        assertThat(interventions).isEmpty()
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun shouldGetSingleQuoteIntervention() {
+        val clientId = clientDao.insertClient(givenClient())
+        val location1Id = clientDao.insertLocation(givenLocation(clientDao.getClient(clientId)!!, "location1"))
+        val quoteId = quoteDao.insertQuote(givenQuote(clientId))
+        val now = LocalDate.now()
+        val intervention1Id = quoteDao.insertQuoteIntervention(givenQuoteIntervention(quoteId, location1Id, now))
+
+        val quote = quoteRepository.getQuote(quoteId)
+
+        assertThat(quote).isNotNull()
+        assertThat(quote.quoteId).isEqualTo(quoteId)
+        assertThat(quote.onGoing).isTrue()
+        assertThat(quote.clientName).isEqualTo("Name")
+        val interventions = quote.interventions
+        assertThat(interventions).hasSize(1)
+        assertThat(interventions[0].interventionId).isEqualTo(intervention1Id)
+        assertThat(interventions[0].locationId).isEqualTo(location1Id)
+        assertThat(interventions[0].locationName).isEqualTo("location1")
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun shouldGet2QuoteInterventions() {
         val clientId = clientDao.insertClient(givenClient())
         val location1Id = clientDao.insertLocation(givenLocation(clientDao.getClient(clientId)!!, "location1"))

@@ -47,7 +47,7 @@ class ClientsFragment : Fragment() {
         viewModel.navigateToClient.observe(viewLifecycleOwner, Observer { clientId ->
             clientId?.let {
                 this.findNavController().navigate(
-                    HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToNewClientFragment()
+                    HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToClientFragment()
                         .setClientId(clientId)
                 )
                 viewModel.onClientDetailNavigated()

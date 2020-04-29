@@ -6,7 +6,7 @@
     app:startDestination="@id/homeViewPagerFragment">
 
     <fragment
-        android:id="@+id/newClientFragment"
+        android:id="@+id/clientFragment"
         android:name="am.falconry.client.ClientFragment"
         android:label="@string/clientScreen"
         tools:layout="@layout/fragment_client" >
@@ -15,7 +15,7 @@
             app:argType="long"
             android:defaultValue="0L" />
         <action
-            android:id="@+id/action_newClientFragment_to_homeViewPagerFragment"
+            android:id="@+id/action_clientFragment_to_homeViewPagerFragment"
             app:destination="@id/homeViewPagerFragment" />
     </fragment>
     <fragment
@@ -23,7 +23,18 @@
         android:name="am.falconry.HomeViewPagerFragment"
         android:label="HomeViewPagerFragment" >
         <action
-            android:id="@+id/action_homeViewPagerFragment_to_newClientFragment"
-            app:destination="@id/newClientFragment" />
+            android:id="@+id/action_homeViewPagerFragment_to_clientFragment"
+            app:destination="@id/clientFragment" />
+        <action
+            android:id="@+id/action_homeViewPagerFragment_to_quoteFragment"
+            app:destination="@id/quoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quoteFragment"
+        android:name="am.falconry.quote.QuoteFragment"
+        android:label="QuoteFragment" >
+        <action
+            android:id="@+id/action_quoteFragment_to_homeViewPagerFragment"
+            app:destination="@id/homeViewPagerFragment" />
     </fragment>
 </navigation>

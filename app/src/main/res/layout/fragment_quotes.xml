@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="am.falconry.quotelist.QuotesViewModel" />
@@ -23,15 +22,15 @@
             tools:context=".quotelist.QuotesFragment"
             tools:listitem="@layout/quote" />
 
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:id="@+id/addClient"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom|end"-->
-<!--            android:layout_margin="16dp"-->
-<!--            android:backgroundTint="@color/colorPrimary"-->
-<!--            android:onClick="@{() -> viewModel.onNewClient()}"-->
-<!--            app:srcCompat="@drawable/ic_plus_24" />-->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addQuote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:onClick="@{() -> viewModel.onNewQuote()}"
+            app:srcCompat="@drawable/ic_plus_24" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

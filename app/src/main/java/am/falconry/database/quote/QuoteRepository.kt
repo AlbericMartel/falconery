@@ -17,10 +17,24 @@ class QuoteRepository(database: FalconryDatabase) {
         return Transformations.map(allQuotes) { quote ->
             quote.map {
                 val client = clientDao.getClient(it.quote.clientId)
-                val interventions = toDomainModel(it.interventions)
-                toDomainModel(it.quote, client!!, interventions)
+                toDomainModel(it.quote, client!!, it.interventions)
             }
         }
+    }
+
+    fun getQuote(quoteId: Long): Quote {
+        val quoteWithInterventions = quoteDao.getQuote(quoteId)
+
+        if (quoteWithInterventions != null) {
+            val client = clientDao.getClient(quoteWithInterventions.quote.clientId) ?: ClientEntity()
+            return toDomainModel(quoteWithInterventions.quote, client, quoteWithInterventions.interventions)
+        }
+
+        return newQuote()
+    }
+
+    private fun newQuote(): Quote {
+        return toDomainModel(QuoteEntity(), ClientEntity(), mutableListOf())
     }
 
     private fun toDomainModel(interventions: List<QuoteInterventionEntity>): List<QuoteIntervention> {
@@ -31,8 +45,8 @@ class QuoteRepository(database: FalconryDatabase) {
         }
     }
 
-    private fun toDomainModel(quote: QuoteEntity, client: ClientEntity, interventions: List<QuoteIntervention>): Quote {
-        return Quote(quote.quoteId, quote.onGoing, client.name, interventions)
+    private fun toDomainModel(quote: QuoteEntity, client: ClientEntity, interventions: List<QuoteInterventionEntity>): Quote {
+        return Quote(quote.quoteId, quote.onGoing, client.name, toDomainModel(interventions))
     }
 
 }

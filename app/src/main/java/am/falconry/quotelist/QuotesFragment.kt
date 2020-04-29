@@ -48,8 +48,7 @@ class QuotesFragment : Fragment() {
         viewModel.navigateToQuote.observe(viewLifecycleOwner, Observer { quoteId ->
             quoteId?.let {
                 this.findNavController().navigate(
-                    HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToNewClientFragment()
-                        .setClientId(quoteId)
+                    HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToQuoteFragment()
                 )
                 viewModel.onQuoteDetailNavigated()
             }

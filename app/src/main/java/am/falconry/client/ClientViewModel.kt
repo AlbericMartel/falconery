@@ -63,10 +63,6 @@ class ClientViewModel(
         }
     }
 
-    fun cancel() {
-        _navigateToClientList.value = true
-    }
-
     private fun saveClient() {
         if (client.value == null) return
 
