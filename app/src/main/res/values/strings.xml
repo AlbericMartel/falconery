@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Fauconnerie</string>
     <string name="clientScreen">Client</string>
+    <string name="client">Client</string>
     <string name="newClient">Nouveau client</string>
     <string name="clientName">Nom</string>
     <string name="clientEmail">Email</string>
     <string name="clientLocations">Emplacements</string>
+    <string name="clientLocation">Emplacement</string>
     <string name="save">Enregistrer</string>
     <string name="cancel">Annuler</string>
     <string name="clientsScreen">Clients</string>
     <string name="quotesScreen">Devis</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="quote">Devis</string>
 </resources>
