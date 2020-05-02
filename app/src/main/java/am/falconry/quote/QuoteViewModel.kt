@@ -2,8 +2,7 @@ package am.falconry.quote
 
 import am.falconry.database.client.ClientRepository
 import am.falconry.database.quote.QuoteRepository
-import am.falconry.domain.Location
-import am.falconry.domain.Quote
+import am.falconry.domain.*
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -21,17 +20,21 @@ class QuoteViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var quote = MutableLiveData<Quote>()
-    val clients = clientRepository.getAllClients()
+    private val _clients = clientRepository.getAllClients()
     private val _clientLocations = MutableLiveData<List<Location>>()
 
-    val clientNames: LiveData<List<String>> = Transformations.map(clients) {
+    val clientNames: LiveData<List<String>> = Transformations.map(_clients) {
         it?.map { client -> client.name } ?: listOf()
     }
 
     val locationNames: LiveData<List<String>> = Transformations.map(_clientLocations) {
         it?.map { location -> location.name } ?: listOf()
     }
+
+    var quote = MutableLiveData<Quote>()
+    var selectedClient: Client? = null
+    var selectedLocation: Location? = null
+    val interventions = MutableLiveData<MutableList<QuoteIntervention>>()
 
     private val _navigateToQuoteList = MutableLiveData<Boolean>()
     val navigateToQuoteList: LiveData<Boolean>
@@ -42,6 +45,22 @@ class QuoteViewModel(
             quote.value = getQuote(clientId)
         }
     }
+
+    fun addLocation() {
+        selectedLocation?.let { location ->
+            val interventions = this.interventions.value ?: mutableListOf()
+
+            if (locationNotAlreadyAdded(interventions, location)) {
+                interventions.add(QuoteFactory.newIntervention(location))
+                this.interventions.value = interventions
+            }
+        }
+    }
+
+    private fun locationNotAlreadyAdded(
+        interventions: MutableList<QuoteIntervention>,
+        location: Location
+    ) = interventions.none { intervention -> intervention.locationId == location.locationId }
 
     private suspend fun getQuote(quoteId: Long): Quote {
         return withContext(Dispatchers.IO) {
@@ -57,13 +76,20 @@ class QuoteViewModel(
 
     fun onSelectClient(clientName: String) {
         uiScope.launch {
-            _clientLocations.value = loadClientLocations(clientName)
+            val client = _clients.value?.first { it.name == clientName }
+            selectedClient = client
+            _clientLocations.value = loadClientLocations(client)
         }
     }
 
-    private suspend fun loadClientLocations(clientName: String): List<Location> {
+    fun onSelectLocation(locationName: String) {
+        val location = _clientLocations.value?.first { it.name == locationName }
+        selectedLocation = location
+    }
+
+    private suspend fun loadClientLocations(client: Client?): List<Location> {
         return withContext(Dispatchers.IO) {
-            val clientId = clients.value?.first { it.name == clientName }?.clientId
+            val clientId = client?.clientId
 
             if (clientId == null) {
                 listOf()

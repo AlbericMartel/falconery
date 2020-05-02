@@ -12,3 +12,16 @@ data class QuoteIntervention(
     var locationId: Long,
     var locationName: String
 )
+
+class QuoteFactory {
+
+    companion object {
+        fun newQuote(): Quote {
+            return Quote(0L, false, "", mutableListOf())
+        }
+
+        fun newIntervention(location: Location): QuoteIntervention {
+            return QuoteIntervention(0L, location.locationId, location.name)
+        }
+    }
+}

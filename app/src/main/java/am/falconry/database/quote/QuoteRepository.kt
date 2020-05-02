@@ -3,6 +3,7 @@ package am.falconry.database.quote
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientEntity
 import am.falconry.domain.Quote
+import am.falconry.domain.QuoteFactory
 import am.falconry.domain.QuoteIntervention
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
@@ -30,11 +31,7 @@ class QuoteRepository(database: FalconryDatabase) {
             return toDomainModel(quoteWithInterventions.quote, client, quoteWithInterventions.interventions)
         }
 
-        return newQuote()
-    }
-
-    private fun newQuote(): Quote {
-        return toDomainModel(QuoteEntity(), ClientEntity(), mutableListOf())
+        return QuoteFactory.newQuote()
     }
 
     private fun toDomainModel(interventions: List<QuoteInterventionEntity>): List<QuoteIntervention> {

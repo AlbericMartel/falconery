@@ -47,8 +47,9 @@ class QuoteFragment : Fragment() {
             view.findNavController().navigateUp()
         }
 
-        handleClientsDropDown()
-        handleClientLocationsDropDown()
+        setupClientsDropDown()
+        setupClientLocationsDropDown()
+        setupInterventions()
 
         viewModel.navigateToQuoteList.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -61,7 +62,7 @@ class QuoteFragment : Fragment() {
         return binding.root
     }
 
-    private fun handleClientsDropDown() {
+    private fun setupClientsDropDown() {
 //        val adapter = ClientAdapter(
 //            requireContext(),
 //            R.layout.dropdown_menu_popup_item,
@@ -97,7 +98,7 @@ class QuoteFragment : Fragment() {
         }
     }
 
-    private fun handleClientLocationsDropDown() {
+    private fun setupClientLocationsDropDown() {
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.dropdown_menu_popup_item,
@@ -108,6 +109,22 @@ class QuoteFragment : Fragment() {
 
         viewModel.locationNames.observe(viewLifecycleOwner, Observer {
             adapter.addAll(it)
+        })
+
+        binding.locationSelect.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, id ->
+            val locationName = parent.getItemAtPosition(position).toString()
+            viewModel.onSelectLocation(locationName)
+        }
+    }
+
+    private fun setupInterventions() {
+        val adapter = QuoteInterventionAdapter()
+        binding.interventionList.adapter = adapter
+
+        viewModel.interventions.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
         })
     }
 }
