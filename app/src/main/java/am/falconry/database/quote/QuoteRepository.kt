@@ -4,7 +4,7 @@ import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientEntity
 import am.falconry.domain.Quote
 import am.falconry.domain.QuoteFactory
-import am.falconry.domain.QuoteIntervention
+import am.falconry.domain.QuoteLocation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 
@@ -18,32 +18,48 @@ class QuoteRepository(database: FalconryDatabase) {
         return Transformations.map(allQuotes) { quote ->
             quote.map {
                 val client = clientDao.getClient(it.quote.clientId)
-                toDomainModel(it.quote, client!!, it.interventions)
+                toDomainModel(it.quote, client!!, it.quoteLocations)
             }
         }
     }
 
     fun getQuote(quoteId: Long): Quote {
-        val quoteWithInterventions = quoteDao.getQuote(quoteId)
+        val quoteWithLocations = quoteDao.getQuote(quoteId)
 
-        if (quoteWithInterventions != null) {
-            val client = clientDao.getClient(quoteWithInterventions.quote.clientId) ?: ClientEntity()
-            return toDomainModel(quoteWithInterventions.quote, client, quoteWithInterventions.interventions)
+        if (quoteWithLocations != null) {
+            val client = clientDao.getClient(quoteWithLocations.quote.clientId) ?: ClientEntity()
+            return toDomainModel(quoteWithLocations.quote, client, quoteWithLocations.quoteLocations)
         }
 
         return QuoteFactory.newQuote()
     }
 
-    private fun toDomainModel(interventions: List<QuoteInterventionEntity>): List<QuoteIntervention> {
-        return interventions.map { quoteIntervention ->
-            val location = clientDao.getLocation(quoteIntervention.locationId)
+    fun saveQuoteLocations(quote: Quote, quoteLocations: MutableList<QuoteLocation>) {
+        val quoteId = quoteDao.insertQuote(toEntity(quote))
 
-            QuoteIntervention(quoteIntervention.interventionId, location!!.locationId, location.name)
+        quoteLocations.forEach {
+            quoteDao.insertQuoteLocation(toEntity(quoteId, it))
         }
     }
 
-    private fun toDomainModel(quote: QuoteEntity, client: ClientEntity, interventions: List<QuoteInterventionEntity>): Quote {
-        return Quote(quote.quoteId, quote.onGoing, client.name, toDomainModel(interventions))
+    private fun toDomainModel(quoteLocations: List<QuoteLocationEntity>): List<QuoteLocation> {
+        return quoteLocations.map { quoteLocation ->
+            val location = clientDao.getLocation(quoteLocation.locationId)
+
+            QuoteLocation(quoteLocation.quoteLocationId, location!!.locationId, location.name, location.trapping, location.scaring)
+        }
+    }
+
+    private fun toDomainModel(quote: QuoteEntity, client: ClientEntity, interventions: List<QuoteLocationEntity>): Quote {
+        return Quote(quote.quoteId, quote.onGoing, client.clientId, client.name, toDomainModel(interventions))
+    }
+
+    private fun toEntity(quote: Quote): QuoteEntity {
+        return QuoteEntity(quote.quoteId, quote.clientId, quote.onGoing)
+    }
+
+    private fun toEntity(quoteId: Long, quoteLocation: QuoteLocation): QuoteLocationEntity {
+        return QuoteLocationEntity(quoteLocation.quoteLocationId, quoteId, quoteLocation.locationId, quoteLocation.trapping, quoteLocation.scaring)
     }
 
 }

@@ -12,3 +12,16 @@ data class Location (
     var trapping: Boolean,
     var scaring: Boolean
 )
+
+class ClientFactory {
+
+    companion object {
+        fun newClient(): Client {
+            return Client(0L, "", "")
+        }
+
+        fun newLocation(): Location {
+            return Location(0L, "", trapping = false, scaring = false)
+        }
+    }
+}

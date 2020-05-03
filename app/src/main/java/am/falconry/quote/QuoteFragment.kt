@@ -33,7 +33,7 @@ class QuoteFragment : Fragment() {
 
         val arguments = ClientFragmentArgs.fromBundle(requireArguments())
 
-        binding =  DataBindingUtil.inflate(inflater, R.layout.fragment_quote, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_quote, container, false)
         val database = FalconryDatabase.getInstance(application)
         val clientRepository = ClientRepository(database)
         val quoteRepository = QuoteRepository(database)
@@ -49,7 +49,7 @@ class QuoteFragment : Fragment() {
 
         setupClientsDropDown()
         setupClientLocationsDropDown()
-        setupInterventions()
+        setupLocations()
 
         viewModel.navigateToQuoteList.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -111,17 +111,22 @@ class QuoteFragment : Fragment() {
             adapter.addAll(it)
         })
 
-        binding.locationSelect.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, id ->
+        binding.locationSelect.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val locationName = parent.getItemAtPosition(position).toString()
             viewModel.onSelectLocation(locationName)
         }
     }
 
-    private fun setupInterventions() {
-        val adapter = QuoteInterventionAdapter()
-        binding.interventionList.adapter = adapter
+    private fun setupLocations() {
+        val adapter = QuoteLocationsAdapter(
+            QuoteLocationOptionClickListener { locationId, checked ->
+                viewModel.updateTrappingOption(locationId, checked)
+            }, QuoteLocationOptionClickListener { locationId, checked ->
+                viewModel.updateScaringOption(locationId, checked)
+            })
+        binding.locationsList.adapter = adapter
 
-        viewModel.interventions.observe(viewLifecycleOwner, Observer {
+        viewModel.quoteLocations.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.data = it
             }

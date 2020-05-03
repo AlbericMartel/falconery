@@ -10,14 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 class QuotesViewModel(
-    val database: QuoteRepository,
+    val repository: QuoteRepository,
     application: Application
 ) : AndroidViewModel(application) {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val quotes = database.getAllQuotes()
+    val quotes = repository.getAllQuotes()
 
     private val _navigateToQuote = MutableLiveData<Long>()
     val navigateToQuote: LiveData<Long>

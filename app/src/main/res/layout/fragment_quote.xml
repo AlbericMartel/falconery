@@ -91,10 +91,21 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/locationSelectLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:onClick="@{() -> viewModel.addLocation()}"/>
+                android:onClick="@{() -> viewModel.addQuoteLocation()}"/>
+
+            <TextView
+                android:id="@+id/quoteLocations"
+                style="@style/formLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/locations"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationSelectLayout" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/interventionList"
+                android:id="@+id/locationsList"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
@@ -104,7 +115,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/saveQuoteButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationSelectLayout">
+                app:layout_constraintTop_toBottomOf="@+id/quoteLocations">
             </androidx.recyclerview.widget.RecyclerView>
 
             <Button

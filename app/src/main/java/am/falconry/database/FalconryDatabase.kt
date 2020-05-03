@@ -6,13 +6,14 @@ import am.falconry.database.client.LocationEntity
 import am.falconry.database.quote.QuoteDatabaseDao
 import am.falconry.database.quote.QuoteEntity
 import am.falconry.database.quote.QuoteInterventionEntity
+import am.falconry.database.quote.QuoteLocationEntity
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [ClientEntity::class, LocationEntity::class, QuoteEntity::class, QuoteInterventionEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ClientEntity::class, LocationEntity::class, QuoteEntity::class, QuoteLocationEntity::class, QuoteInterventionEntity::class], version = 1, exportSchema = false)
 @TypeConverters(am.falconry.database.quote.TypeConverters::class)
 abstract class FalconryDatabase : RoomDatabase() {
 

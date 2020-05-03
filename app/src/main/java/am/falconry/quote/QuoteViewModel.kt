@@ -11,7 +11,7 @@ import androidx.lifecycle.Transformations
 import kotlinx.coroutines.*
 
 class QuoteViewModel(
-    private val clientId: Long = 0L,
+    private val quoteId: Long = 0L,
     private val clientRepository: ClientRepository,
     private val quoteRepository: QuoteRepository,
     application: Application
@@ -34,7 +34,10 @@ class QuoteViewModel(
     var quote = MutableLiveData<Quote>()
     var selectedClient: Client? = null
     var selectedLocation: Location? = null
-    val interventions = MutableLiveData<MutableList<QuoteIntervention>>()
+    var selectedDate: String? = null
+    var trapping: Boolean = false
+    var scaring: Boolean = false
+    val quoteLocations = MutableLiveData<MutableList<QuoteLocation>>()
 
     private val _navigateToQuoteList = MutableLiveData<Boolean>()
     val navigateToQuoteList: LiveData<Boolean>
@@ -42,50 +45,52 @@ class QuoteViewModel(
 
     init {
         uiScope.launch {
-            quote.value = getQuote(clientId)
+            quote.value = getQuote()
         }
     }
 
-    fun addLocation() {
-        selectedLocation?.let { location ->
-            val interventions = this.interventions.value ?: mutableListOf()
-
-            if (locationNotAlreadyAdded(interventions, location)) {
-                interventions.add(QuoteFactory.newIntervention(location))
-                this.interventions.value = interventions
-            }
-        }
-    }
-
-    private fun locationNotAlreadyAdded(
-        interventions: MutableList<QuoteIntervention>,
-        location: Location
-    ) = interventions.none { intervention -> intervention.locationId == location.locationId }
-
-    private suspend fun getQuote(quoteId: Long): Quote {
+    private suspend fun getQuote(): Quote {
         return withContext(Dispatchers.IO) {
             quoteRepository.getQuote(quoteId)
         }
     }
 
-//    fun onSelectClient(client: Client) {
-//        uiScope.launch {
-//            _clientLocations.value = loadClientLocations(client)
-//        }
-//    }
-
     fun onSelectClient(clientName: String) {
         uiScope.launch {
+            if (selectedClient != null) {
+                resetClientLocations()
+            }
+
             val client = _clients.value?.first { it.name == clientName }
             selectedClient = client
             _clientLocations.value = loadClientLocations(client)
         }
     }
 
+    private fun resetClientLocations() {
+        _clientLocations.value = mutableListOf()
+    }
+
     fun onSelectLocation(locationName: String) {
         val location = _clientLocations.value?.first { it.name == locationName }
         selectedLocation = location
     }
+
+    fun addQuoteLocation() {
+        selectedLocation?.let { location ->
+            val quoteLocations = this.quoteLocations.value ?: mutableListOf()
+
+            if (locationNotAlreadyAdded(quoteLocations, location)) {
+                quoteLocations.add(QuoteFactory.newQuoteLocation(location))
+                this.quoteLocations.value = quoteLocations
+            }
+        }
+    }
+
+    private fun locationNotAlreadyAdded(
+        quoteLocations: MutableList<QuoteLocation>,
+        location: Location
+    ) = quoteLocations.none { intervention -> intervention.locationId == location.locationId }
 
     private suspend fun loadClientLocations(client: Client?): List<Location> {
         return withContext(Dispatchers.IO) {
@@ -100,21 +105,37 @@ class QuoteViewModel(
         }
     }
 
+    fun updateTrappingOption(locationId: Long, checked: Boolean) {
+        quoteLocations.value?.first { it.locationId == locationId }.also { it?.trapping = checked }
+    }
+
+    fun updateScaringOption(locationId: Long, checked: Boolean) {
+        quoteLocations.value?.first { it.locationId == locationId }.also { it?.scaring = checked }
+    }
+
     fun trySaveQuote() {
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                saveQuote()
+            }
+        }
+        _navigateToQuoteList.value = true
     }
 
     private fun saveQuote() {
-//        if (quote.value == null) return
-//
-//        val areAllLocationsValid = locations.value?.all { location -> isLocationValid(location) } ?: true
-//        if (areAllLocationsValid) {
-//            val updatedLocations = locations.value ?: listOf()
-//            repository.saveClient(client.value!!, updatedLocations)
-//        }
+        if (!isQuoteValid()) return
+
+        quote.value!!.clientId = selectedClient!!.clientId
+
+        val areAllLocationsValid = quoteLocations.value?.distinctBy { it.locationName }?.size == quoteLocations.value?.size ?: true
+        if (areAllLocationsValid) {
+            val updatedLocations = quoteLocations.value ?: mutableListOf()
+            quoteRepository.saveQuoteLocations(quote.value!!, updatedLocations)
+        }
     }
 
     private fun isQuoteValid(): Boolean {
-        return false
+        return selectedClient != null && quote.value != null
     }
 
     fun doneNavigatingToQuoteList() {
