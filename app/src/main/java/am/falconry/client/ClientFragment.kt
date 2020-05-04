@@ -17,6 +17,9 @@ import androidx.navigation.fragment.findNavController
 
 class ClientFragment : Fragment() {
 
+    private lateinit var viewModel: ClientViewModel
+    private lateinit var binding: FragmentClientBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,42 +28,50 @@ class ClientFragment : Fragment() {
 
         val arguments = ClientFragmentArgs.fromBundle(requireArguments())
 
-        val binding: FragmentClientBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
         val repository = ClientRepository(FalconryDatabase.getInstance(application))
-        val viewModelFactory = ClientViewModelFactory(arguments.clientId, repository, application)
-        val clientViewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
+        val viewModelFactory = ClientViewModelFactory(arguments.clientId, repository)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
 
         binding.topAppBar.setNavigationOnClickListener { view ->
             view.findNavController().navigateUp()
         }
 
         binding.lifecycleOwner = this
-        binding.clientViewModel = clientViewModel
+        binding.clientViewModel = viewModel
 
-        val adapter = ClientLocationAdapter(
-            LocationOptionClickListener { locationId, checked ->
-                clientViewModel.updateTrappingOption(locationId, checked)
-            }, LocationOptionClickListener { locationId, checked ->
-                clientViewModel.updateScaringOption(locationId, checked)
-            })
-        binding.locationsList.adapter = adapter
+        setupLocationsObservers(viewModel, binding)
 
-        clientViewModel.locations.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.data = it
-            }
-        })
-
-        clientViewModel.navigateToClientList.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToClientList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 this.findNavController()
                     .navigate(ClientFragmentDirections.actionClientFragmentToHomeViewPagerFragment())
-                clientViewModel.doneNavigatingToClientList()
+                viewModel.doneNavigatingToClientList()
             }
         })
 
         return binding.root
+    }
+
+    private fun setupLocationsObservers(viewModel: ClientViewModel, binding: FragmentClientBinding) {
+        val adapter = ClientLocationAdapter(
+            LocationOptionClickListener { locationId, checked ->
+                viewModel.updateTrappingOption(locationId, checked)
+            }, LocationOptionClickListener { locationId, checked ->
+                viewModel.updateScaringOption(locationId, checked)
+            })
+        binding.locationsList.adapter = adapter
+
+        viewModel.loadedLocations.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                viewModel.locations.value = it.toMutableList()
+            }
+        })
+
+        viewModel.locations.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
     }
 }

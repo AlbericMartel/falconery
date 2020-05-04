@@ -15,8 +15,8 @@ interface ClientDatabaseDao {
     @Update
     fun updateClient(client: ClientEntity)
 
-    @Query("SELECT * from client WHERE clientId = :clientId")
-    fun getClient(clientId: Long): ClientEntity?
+    @Query("SELECT * FROM client WHERE clientId = :clientId")
+    fun getClient(clientId: Long): LiveData<ClientEntity?>
 
     @Query("SELECT * FROM client ORDER BY name DESC")
     fun getAllClients(): LiveData<List<ClientEntity>>
@@ -31,5 +31,5 @@ interface ClientDatabaseDao {
     fun getLocation(locationId: Long): LocationEntity?
 
     @Query("SELECT * FROM location WHERE clientId = :clientId ORDER BY name DESC")
-    fun getAllClientLocations(clientId: Long): List<LocationEntity>
+    fun getAllClientLocations(clientId: Long): LiveData<List<LocationEntity>>
 }

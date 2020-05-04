@@ -108,6 +108,7 @@ class QuoteFragment : Fragment() {
         binding.locationSelect.setAdapter(adapter)
 
         viewModel.locationNames.observe(viewLifecycleOwner, Observer {
+            adapter.clear()
             adapter.addAll(it)
         })
 

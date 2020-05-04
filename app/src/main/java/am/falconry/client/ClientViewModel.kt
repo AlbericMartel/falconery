@@ -1,53 +1,32 @@
 package am.falconry.client
 
 import am.falconry.database.client.ClientRepository
-import am.falconry.domain.Client
 import am.falconry.domain.Location
-import android.app.Application
 import android.util.Patterns
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 
 class ClientViewModel(
-    private val clientId: Long = 0L,
-    private val repository: ClientRepository,
-    application: Application
-) : AndroidViewModel(application) {
+    clientId: Long = 0L,
+    private val repository: ClientRepository
+) : ViewModel() {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var client = MutableLiveData<Client>()
-    var locations = MutableLiveData<List<Location>>()
+    var client = repository.getClient(clientId)
+    var loadedLocations: LiveData<List<Location>> = repository.getClientLocations(clientId)
+    var locations = MutableLiveData<MutableList<Location>>()
 
     private val _navigateToClientList = MutableLiveData<Boolean>()
     val navigateToClientList: LiveData<Boolean>
         get() = _navigateToClientList
 
-    init {
-        uiScope.launch {
-            client.value = loadClient(clientId)
-            locations.value = loadLocations(clientId)
-        }
-    }
-
-    private suspend fun loadClient(clientId: Long): Client {
-        return withContext(Dispatchers.IO) {
-            repository.getClient(clientId)
-        }
-    }
-
-    private suspend fun loadLocations(clientId: Long): MutableList<Location> {
-        return withContext(Dispatchers.IO) {
-            repository.getClientLocations(clientId).toMutableList()
-        }
-    }
-
     fun newClientLocation() {
-        val currentLocations: MutableList<Location>? = locations.value?.toMutableList()
-        currentLocations?.add(repository.newLocation())?.also {
+        val currentLocations: MutableList<Location>? = locations.value
+        currentLocations?.add(Location.newLocation())?.also {
             locations.value = currentLocations
         }
     }
@@ -68,7 +47,7 @@ class ClientViewModel(
 
         val areAllLocationsValid = locations.value?.all { location -> isLocationValid(location) } ?: true
         if (areAllLocationsValid) {
-            val updatedLocations = locations.value ?: listOf()
+            val updatedLocations = locations.value ?: mutableListOf()
             repository.saveClient(client.value!!, updatedLocations)
         }
     }

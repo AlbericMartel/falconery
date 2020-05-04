@@ -24,8 +24,9 @@ import am.falconry.database.quote.QuoteDatabaseDao
 import am.falconry.database.quote.QuoteEntity
 import am.falconry.database.quote.QuoteLocationEntity
 import am.falconry.database.quote.QuoteRepository
-import am.falconry.domain.ClientFactory
-import am.falconry.domain.QuoteFactory
+import am.falconry.domain.Location
+import am.falconry.domain.Quote
+import am.falconry.domain.QuoteLocation
 import am.falconry.utils.getValue
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -70,7 +71,7 @@ class QuoteRepositoryTest {
     @Test
     @Throws(Exception::class)
     fun shouldGetNewQuoteWhenNotExistingQuoteId() {
-        val quote = quoteRepository.getQuote(123)
+        val quote = getValue(quoteRepository.getQuote(123))
 
         assertThat(quote).isNotNull()
         assertThat(quote.quoteId).isEqualTo(0L)
@@ -84,12 +85,12 @@ class QuoteRepositoryTest {
     @Throws(Exception::class)
     fun shouldGetSingleQuoteLocation() {
         val clientId = clientDao.insertClient(givenClientEntity())
-        val location = givenLocationEntity(clientDao.getClient(clientId)!!, "location1")
+        val location = givenLocationEntity(getClient(clientId), "location1")
         val location1Id = clientDao.insertLocation(location)
         val quoteId = quoteDao.insertQuote(givenQuoteEntity(clientId))
         val quoteLocation1Id = quoteDao.insertQuoteLocation(givenQuoteLocationEntity(quoteId, location1Id, location.trapping, location.scaring))
 
-        val quote = quoteRepository.getQuote(quoteId)
+        val quote = getValue(quoteRepository.getQuote(quoteId))
 
         assertThat(quote).isNotNull()
         assertThat(quote.quoteId).isEqualTo(quoteId)
@@ -108,9 +109,9 @@ class QuoteRepositoryTest {
     @Throws(Exception::class)
     fun shouldGet2QuoteInterventions() {
         val clientId = clientDao.insertClient(givenClientEntity())
-        val location1 = givenLocationEntity(clientDao.getClient(clientId)!!, "location1")
+        val location1 = givenLocationEntity(getClient(clientId), "location1")
         val location1Id = clientDao.insertLocation(location1)
-        val location2 = givenLocationEntity(clientDao.getClient(clientId)!!, "location2")
+        val location2 = givenLocationEntity(getClient(clientId), "location2")
         val location2Id = clientDao.insertLocation(location2)
         val quoteId = quoteDao.insertQuote(givenQuoteEntity(clientId))
         val quoteLocation1Id = quoteDao.insertQuoteLocation(givenQuoteLocationEntity(quoteId, location1Id, location1.trapping, location1.scaring))
@@ -142,7 +143,7 @@ class QuoteRepositoryTest {
     fun shouldSaveQuoteWithoutQuoteLocations() {
         val clientId = clientDao.insertClient(givenClientEntity())
 
-        val quote = QuoteFactory.newQuote()
+        val quote = Quote.newQuote()
         quote.clientId = clientId
         quote.onGoing = true
 
@@ -159,17 +160,17 @@ class QuoteRepositoryTest {
     @Throws(Exception::class)
     fun shouldSaveQuoteWithQuoteLocation() {
         val clientId = clientDao.insertClient(givenClientEntity())
-        val locationId = clientDao.insertLocation(givenLocationEntity(clientDao.getClient(clientId)!!, "location1"))
+        val locationId = clientDao.insertLocation(givenLocationEntity(getClient(clientId), "location1"))
 
-        val quote = QuoteFactory.newQuote()
+        val quote = Quote.newQuote()
         quote.clientId = clientId
         quote.onGoing = true
 
-        val location = ClientFactory.newLocation()
+        val location = Location.newLocation()
         location.locationId = locationId
         location.trapping = true
         location.scaring = true
-        val quoteLocation = QuoteFactory.newQuoteLocation(location)
+        val quoteLocation = QuoteLocation.from(location)
 
         quoteRepository.saveQuoteLocations(quote, mutableListOf(quoteLocation))
 
@@ -184,6 +185,8 @@ class QuoteRepositoryTest {
         assertThat(savedQuoteLocation.trapping).isTrue()
         assertThat(savedQuoteLocation.scaring).isTrue()
     }
+
+    private fun getClient(clientId: Long) = getValue(clientDao.getClient(clientId))!!
 
     private fun givenClientEntity(): ClientEntity {
         val client = ClientEntity()

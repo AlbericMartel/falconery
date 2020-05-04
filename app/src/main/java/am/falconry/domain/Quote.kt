@@ -6,7 +6,13 @@ data class Quote(
     var clientId: Long,
     var clientName: String,
     var quoteLocations: List<QuoteLocation>
-)
+) {
+    companion object {
+        fun newQuote(): Quote {
+            return Quote(0L, false, 0L, "", mutableListOf())
+        }
+    }
+}
 
 data class QuoteLocation(
     var quoteLocationId: Long,
@@ -14,16 +20,9 @@ data class QuoteLocation(
     var locationName: String,
     var trapping: Boolean,
     var scaring: Boolean
-)
-
-class QuoteFactory {
-
+) {
     companion object {
-        fun newQuote(): Quote {
-            return Quote(0L, false, 0L, "", mutableListOf())
-        }
-
-        fun newQuoteLocation(location: Location): QuoteLocation {
+        fun from(location: Location): QuoteLocation {
             return QuoteLocation(0L, location.locationId, location.name, location.trapping, location.scaring)
         }
     }

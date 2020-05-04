@@ -19,20 +19,23 @@ class ClientRepository(database: FalconryDatabase) {
         }
     }
 
-    fun getClient(clientId: Long): Client {
-        val client = clientDao.getClient(clientId) ?: return newClient()
+    fun getClient(clientId: Long): LiveData<Client> {
+        val client = clientDao.getClient(clientId)
 
-        return toClientDomainModel(client)
+        return Transformations.map(client) {
+            if (it != null) {
+                toClientDomainModel(it)
+            } else {
+                Client.newClient()
+            }
+        }
     }
 
-    fun newLocation(): Location {
-        return toLocationDomainModel(LocationEntity())
-    }
-
-    fun getClientLocations(clientId: Long): List<Location> {
+    fun getClientLocations(clientId: Long): LiveData<List<Location>> {
         val locations = clientDao.getAllClientLocations(clientId)
-
-        return locations.map { toLocationDomainModel(it) }
+        return Transformations.map(locations) { locationEntities ->
+            locationEntities.map { toLocationDomainModel(it) }
+        }
     }
 
     fun saveClient(client: Client, locations: List<Location>): Long {
@@ -64,10 +67,6 @@ class ClientRepository(database: FalconryDatabase) {
 
     private fun toLocationEntity(clientId: Long, location: Location): LocationEntity {
         return LocationEntity(location.locationId, clientId, location.name, location.trapping, location.scaring)
-    }
-
-    private fun newClient(): Client {
-        return toClientDomainModel(ClientEntity())
     }
 
     private fun toClientDomainModel(client: ClientEntity): Client {
