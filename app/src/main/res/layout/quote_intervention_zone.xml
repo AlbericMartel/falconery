@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="quoteLocation"
-            type="am.falconry.domain.QuoteLocation" />
+            name="quoteInterventionZone"
+            type="am.falconry.domain.QuoteInterventionZone" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +18,7 @@
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:text="@{quoteLocation.locationName}"
+            android:text="@{quoteInterventionZone.interventionZoneName}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/trapping"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:button="@drawable/ic_cage_24_toggle"
-            android:checked="@={quoteLocation.trapping}"
+            android:checked="@={quoteInterventionZone.trapping}"
             app:layout_constraintEnd_toStartOf="@id/scaring"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/ic_eagle_24_toggle"
-            android:checked="@={quoteLocation.scaring}"
+            android:checked="@={quoteInterventionZone.scaring}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

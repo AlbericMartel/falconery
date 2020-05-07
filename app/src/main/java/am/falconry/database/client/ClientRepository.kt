@@ -2,7 +2,7 @@ package am.falconry.database.client
 
 import am.falconry.database.FalconryDatabase
 import am.falconry.domain.Client
-import am.falconry.domain.Location
+import am.falconry.domain.InterventionZone
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 
@@ -31,14 +31,14 @@ class ClientRepository(database: FalconryDatabase) {
         }
     }
 
-    fun getClientLocations(clientId: Long): LiveData<List<Location>> {
-        val locations = clientDao.getAllClientLocations(clientId)
-        return Transformations.map(locations) { locationEntities ->
-            locationEntities.map { toLocationDomainModel(it) }
+    fun getClientInterventionZones(clientId: Long): LiveData<List<InterventionZone>> {
+        val interventionZones = clientDao.getAllClientInterventionZones(clientId)
+        return Transformations.map(interventionZones) { interventionZoneEntities ->
+            interventionZoneEntities.map { toInterventionZoneDomainModel(it) }
         }
     }
 
-    fun saveClient(client: Client, locations: List<Location>): Long {
+    fun saveClient(client: Client, interventionZones: List<InterventionZone>): Long {
         var clientId = client.clientId
         val clientEntity = toClientEntity(client)
         if (clientId != 0L) {
@@ -47,17 +47,17 @@ class ClientRepository(database: FalconryDatabase) {
             clientId = clientDao.insertClient(clientEntity)
         }
 
-        locations.forEach { saveLocation(clientId, it) }
+        interventionZones.forEach { saveInterventionZone(clientId, it) }
 
         return clientId
     }
 
-    private fun saveLocation(clientId: Long, location: Location) {
-        val locationEntity = toLocationEntity(clientId, location)
-        if (location.locationId != 0L) {
-            clientDao.updateLocation(locationEntity)
+    private fun saveInterventionZone(clientId: Long, interventionZone: InterventionZone) {
+        val interventionZoneEntity = toInterventionZoneEntity(clientId, interventionZone)
+        if (interventionZone.interventionZoneId != 0L) {
+            clientDao.updateInterventionZone(interventionZoneEntity)
         } else {
-            clientDao.insertLocation(locationEntity)
+            clientDao.insertInterventionZone(interventionZoneEntity)
         }
     }
 
@@ -65,16 +65,16 @@ class ClientRepository(database: FalconryDatabase) {
         return ClientEntity(client.clientId, client.name, client.email)
     }
 
-    private fun toLocationEntity(clientId: Long, location: Location): LocationEntity {
-        return LocationEntity(location.locationId, clientId, location.name, location.trapping, location.scaring)
+    private fun toInterventionZoneEntity(clientId: Long, interventionZone: InterventionZone): InterventionZoneEntity {
+        return InterventionZoneEntity(interventionZone.interventionZoneId, clientId, interventionZone.name, interventionZone.trapping, interventionZone.scaring)
     }
 
     private fun toClientDomainModel(client: ClientEntity): Client {
         return Client(client.clientId, client.name, client.email)
     }
 
-    private fun toLocationDomainModel(location: LocationEntity): Location {
-        return Location(location.locationId, location.name, location.trapping, location.scaring)
+    private fun toInterventionZoneDomainModel(interventionZone: InterventionZoneEntity): InterventionZone {
+        return InterventionZone(interventionZone.interventionZoneId, interventionZone.name, interventionZone.trapping, interventionZone.scaring)
     }
 
 }

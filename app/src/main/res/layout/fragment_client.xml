@@ -84,19 +84,19 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/clientLocations"
+                android:id="@+id/clientInterventionZones"
                 style="@style/formLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/locations"
+                android:text="@string/interventionZones"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clientEmailEditLayout" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/locationsList"
+                android:id="@+id/interventionZonesList"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
@@ -105,7 +105,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/saveClientButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clientLocations">
+                app:layout_constraintTop_toBottomOf="@+id/clientInterventionZones">
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -127,7 +127,7 @@
                 android:layout_height="2dp"
                 android:layout_marginStart="2dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toTopOf="@+id/locationsList"
+                app:layout_constraintBottom_toTopOf="@+id/interventionZonesList"
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -138,9 +138,9 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginEnd="16dp"
-            android:onClick="@{() -> clientViewModel.newClientLocation()}"
+            android:onClick="@{() -> clientViewModel.newClientInterventionZone()}"
             app:srcCompat="@drawable/ic_plus_24"
-            app:layout_anchor="@+id/locationsList"
+            app:layout_anchor="@+id/interventionZonesList"
             app:layout_anchorGravity="top|right|end"
             app:fabSize="mini"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

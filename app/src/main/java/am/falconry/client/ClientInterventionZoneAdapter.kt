@@ -1,17 +1,17 @@
-package am.falconry.quote
+package am.falconry.client
 
-import am.falconry.databinding.QuoteLocationBinding
-import am.falconry.domain.QuoteLocation
+import am.falconry.databinding.ClientInterventionZoneBinding
+import am.falconry.domain.InterventionZone
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class QuoteLocationsAdapter(
-    private val trappingClickListener: QuoteLocationOptionClickListener,
-    private val scaringClickListener: QuoteLocationOptionClickListener
-) : RecyclerView.Adapter<QuoteLocationsAdapter.ViewHolder>() {
+class ClientInterventionZoneAdapter(
+    private val trappingClickListener: InterventionZoneOptionClickListener,
+    private val scaringClickListener: InterventionZoneOptionClickListener
+) : RecyclerView.Adapter<ClientInterventionZoneAdapter.ViewHolder>() {
 
-    var data = listOf<QuoteLocation>()
+    var data =  listOf<InterventionZone>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -29,10 +29,10 @@ class QuoteLocationsAdapter(
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: QuoteLocationBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(val binding: ClientInterventionZoneBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: QuoteLocation, trappingClickListener: QuoteLocationOptionClickListener, scaringClickListener: QuoteLocationOptionClickListener) {
-            binding.quoteLocation = item
+        fun bind(item: InterventionZone, trappingClickListener: InterventionZoneOptionClickListener, scaringClickListener: InterventionZoneOptionClickListener) {
+            binding.clientInterventionZone = item
             binding.trapping.setOnCheckedChangeListener { _, isChecked ->
                 trappingClickListener.onClick(item, isChecked)
             }
@@ -45,13 +45,13 @@ class QuoteLocationsAdapter(
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = QuoteLocationBinding.inflate(layoutInflater, parent, false)
+                val binding = ClientInterventionZoneBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
     }
 }
 
-class QuoteLocationOptionClickListener(val clickListener: (locationId: Long, checked: Boolean) -> Unit) {
-    fun onClick(quoteLocation: QuoteLocation, checked: Boolean) = clickListener(quoteLocation.locationId, checked)
+class InterventionZoneOptionClickListener(val clickListener: (interventionZoneId: Long, checked: Boolean) -> Unit) {
+    fun onClick(interventionZone: InterventionZone, checked: Boolean) = clickListener(interventionZone.interventionZoneId, checked)
 }

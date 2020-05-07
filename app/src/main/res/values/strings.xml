@@ -5,8 +5,8 @@
     <string name="newClient">Nouveau client</string>
     <string name="clientName">Nom</string>
     <string name="clientEmail">Email</string>
-    <string name="locations">Emplacements</string>
-    <string name="clientLocation">Emplacement</string>
+    <string name="interventionZones">Zones d\'intervention</string>
+    <string name="clientInterventionZone">Zone d\'intervention</string>
     <string name="save">Enregistrer</string>
     <string name="cancel">Annuler</string>
     <string name="clientsScreen">Clients</string>

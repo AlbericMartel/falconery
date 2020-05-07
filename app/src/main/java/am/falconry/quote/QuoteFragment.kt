@@ -48,8 +48,8 @@ class QuoteFragment : Fragment() {
         }
 
         setupClientsDropDown()
-        setupClientLocationsDropDown()
-        setupLocations()
+        setupClientInterventionZonesDropDown()
+        setupInterventionZones()
 
         viewModel.navigateToQuoteList.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -98,36 +98,36 @@ class QuoteFragment : Fragment() {
         }
     }
 
-    private fun setupClientLocationsDropDown() {
+    private fun setupClientInterventionZonesDropDown() {
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.dropdown_menu_popup_item,
             mutableListOf<String>()
         )
 
-        binding.locationSelect.setAdapter(adapter)
+        binding.interventionZoneSelect.setAdapter(adapter)
 
-        viewModel.locationNames.observe(viewLifecycleOwner, Observer {
+        viewModel.interventionZoneNames.observe(viewLifecycleOwner, Observer {
             adapter.clear()
             adapter.addAll(it)
         })
 
-        binding.locationSelect.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            val locationName = parent.getItemAtPosition(position).toString()
-            viewModel.onSelectLocation(locationName)
+        binding.interventionZoneSelect.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            val interventionZoneName = parent.getItemAtPosition(position).toString()
+            viewModel.onSelectInterventionZone(interventionZoneName)
         }
     }
 
-    private fun setupLocations() {
-        val adapter = QuoteLocationsAdapter(
-            QuoteLocationOptionClickListener { locationId, checked ->
-                viewModel.updateTrappingOption(locationId, checked)
-            }, QuoteLocationOptionClickListener { locationId, checked ->
-                viewModel.updateScaringOption(locationId, checked)
+    private fun setupInterventionZones() {
+        val adapter = QuoteInterventionZonesAdapter(
+            QuoteInterventionZoneOptionClickListener { interventionZoneId, checked ->
+                viewModel.updateTrappingOption(interventionZoneId, checked)
+            }, QuoteInterventionZoneOptionClickListener { interventionZoneId, checked ->
+                viewModel.updateScaringOption(interventionZoneId, checked)
             })
-        binding.locationsList.adapter = adapter
+        binding.interventionZonesList.adapter = adapter
 
-        viewModel.quoteLocations.observe(viewLifecycleOwner, Observer {
+        viewModel.quoteInterventionZones.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.data = it
             }

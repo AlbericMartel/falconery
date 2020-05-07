@@ -4,9 +4,9 @@ import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.ClientEntity
 import am.falconry.database.client.ClientRepository
-import am.falconry.database.client.LocationEntity
+import am.falconry.database.client.InterventionZoneEntity
 import am.falconry.domain.Client
-import am.falconry.domain.Location
+import am.falconry.domain.InterventionZone
 import am.falconry.utils.getValue
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -112,7 +112,7 @@ class ClientRepositoryTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldCreateNewClientLocation() {
+    fun shouldCreateNewClientInterventionZone() {
         val clientId = clientDao.insertClient(ClientEntity(0L, "name", "email"))
         val client = Client(clientId, "name.updated", "email.updated")
 
@@ -127,67 +127,67 @@ class ClientRepositoryTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldGetClientLocations() {
+    fun shouldGetClientInterventionZones() {
         val clientId = clientDao.insertClient(ClientEntity(0L, "name", "email"))
-        val location = defaultLocation(clientId)
-        val locationId = clientDao.insertLocation(location)
+        val interventionZone = defaultInterventionZone(clientId)
+        val interventionZoneId = clientDao.insertInterventionZone(interventionZone)
 
-        val locations = getValue(repository.getClientLocations(clientId))
+        val interventionZones = getValue(repository.getClientInterventionZones(clientId))
 
-        assertThat(locations).isNotNull()
-        assertThat(locations).hasSize(1)
-        assertThat(locations[0].locationId).isEqualTo(locationId)
-        assertThat(locations[0].name).isEqualTo("location")
-        assertThat(locations[0].scaring).isTrue()
-        assertThat(locations[0].trapping).isTrue()
+        assertThat(interventionZones).isNotNull()
+        assertThat(interventionZones).hasSize(1)
+        assertThat(interventionZones[0].interventionZoneId).isEqualTo(interventionZoneId)
+        assertThat(interventionZones[0].name).isEqualTo("interventionZone")
+        assertThat(interventionZones[0].scaring).isTrue()
+        assertThat(interventionZones[0].trapping).isTrue()
     }
 
     @Test
     @Throws(Exception::class)
-    fun shouldCreateClientLocation() {
+    fun shouldCreateClientInterventionZone() {
         val clientId = clientDao.insertClient(ClientEntity(0L, "name", "email"))
         val client = getValue(repository.getClient(clientId))
-        val location = Location(0L, "location", trapping = true, scaring = true)
+        val interventionZone = InterventionZone(0L, "interventionZone", trapping = true, scaring = true)
 
-        repository.saveClient(client, listOf(location))
+        repository.saveClient(client, listOf(interventionZone))
 
-        val locations = getValue(clientDao.getAllClientLocations(clientId))
-        assertThat(locations).isNotNull()
-        assertThat(locations).hasSize(1)
-        assertThat(locations[0].clientId).isEqualTo(clientId)
-        assertThat(locations[0].name).isEqualTo("location")
-        assertThat(locations[0].scaring).isTrue()
-        assertThat(locations[0].trapping).isTrue()
+        val interventionZones = getValue(clientDao.getAllClientInterventionZones(clientId))
+        assertThat(interventionZones).isNotNull()
+        assertThat(interventionZones).hasSize(1)
+        assertThat(interventionZones[0].clientId).isEqualTo(clientId)
+        assertThat(interventionZones[0].name).isEqualTo("interventionZone")
+        assertThat(interventionZones[0].scaring).isTrue()
+        assertThat(interventionZones[0].trapping).isTrue()
     }
 
     @Test
     @Throws(Exception::class)
-    fun shouldUpdateClientLocation() {
+    fun shouldUpdateClientInterventionZone() {
         val clientId = clientDao.insertClient(ClientEntity(0L, "name", "email"))
         val client = getValue(repository.getClient(clientId))
-        val locationId = clientDao.insertLocation(defaultLocation(clientId))
-        val updatedLocation = Location(locationId, "location.updated", trapping = false, scaring = false)
+        val interventionZoneId = clientDao.insertInterventionZone(defaultInterventionZone(clientId))
+        val updatedInterventionZone = InterventionZone(interventionZoneId, "interventionZone.updated", trapping = false, scaring = false)
 
-        repository.saveClient(client, listOf(updatedLocation))
+        repository.saveClient(client, listOf(updatedInterventionZone))
 
-        val locations = getValue(clientDao.getAllClientLocations(clientId))
-        assertThat(locations).isNotNull()
-        assertThat(locations).hasSize(1)
-        assertThat(locations[0].locationId).isEqualTo(locationId)
-        assertThat(locations[0].clientId).isEqualTo(clientId)
-        assertThat(locations[0].name).isEqualTo("location.updated")
-        assertThat(locations[0].scaring).isFalse()
-        assertThat(locations[0].trapping).isFalse()
+        val interventionZones = getValue(clientDao.getAllClientInterventionZones(clientId))
+        assertThat(interventionZones).isNotNull()
+        assertThat(interventionZones).hasSize(1)
+        assertThat(interventionZones[0].interventionZoneId).isEqualTo(interventionZoneId)
+        assertThat(interventionZones[0].clientId).isEqualTo(clientId)
+        assertThat(interventionZones[0].name).isEqualTo("interventionZone.updated")
+        assertThat(interventionZones[0].scaring).isFalse()
+        assertThat(interventionZones[0].trapping).isFalse()
     }
 
-    private fun defaultLocation(clientId: Long): LocationEntity {
-        val location = LocationEntity()
-        location.clientId = clientId
-        location.name = "location"
-        location.trapping = true
-        location.scaring = true
+    private fun defaultInterventionZone(clientId: Long): InterventionZoneEntity {
+        val interventionZone = InterventionZoneEntity()
+        interventionZone.clientId = clientId
+        interventionZone.name = "interventionZone"
+        interventionZone.trapping = true
+        interventionZone.scaring = true
 
-        return location
+        return interventionZone
     }
 
     private fun defaultClient(): ClientEntity {

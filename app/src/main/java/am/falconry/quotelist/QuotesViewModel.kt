@@ -19,20 +19,28 @@ class QuotesViewModel(
 
     val quotes = repository.getAllQuotes()
 
-    private val _navigateToQuote = MutableLiveData<Long>()
-    val navigateToQuote: LiveData<Long>
-        get() = _navigateToQuote
+    private val _navigateToQuoteInterventionZoneConf = MutableLiveData<Long>()
+    val navigateToQuoteInterventionZoneConf: LiveData<Long>
+        get() = _navigateToQuoteInterventionZoneConf
+
+    private val _navigateToQuoteInterventions = MutableLiveData<Long>()
+    val navigateToQuoteInterventions: LiveData<Long>
+        get() = _navigateToQuoteInterventions
 
     fun onNewQuote() {
-        _navigateToQuote.value = 0L
+        _navigateToQuoteInterventionZoneConf.value = 0L
     }
 
-    fun onQuoteClicked(id: Long) {
-        _navigateToQuote.value = id
+    fun onQuoteInterventionZoneConfNavigated() {
+        _navigateToQuoteInterventionZoneConf.value = null
     }
 
-    fun onQuoteDetailNavigated() {
-        _navigateToQuote.value = null
+    fun onQuoteClicked(quoteInterventionZoneId: Long) {
+        _navigateToQuoteInterventions.value = quoteInterventionZoneId
+    }
+
+    fun onQuoteInterventionsNavigated() {
+        _navigateToQuoteInterventions.value = null
     }
 
     override fun onCleared() {

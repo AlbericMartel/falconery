@@ -5,7 +5,7 @@ data class Quote(
     var onGoing: Boolean,
     var clientId: Long,
     var clientName: String,
-    var quoteLocations: List<QuoteLocation>
+    var quoteInterventionZones: List<QuoteInterventionZone>
 ) {
     companion object {
         fun newQuote(): Quote {
@@ -14,16 +14,16 @@ data class Quote(
     }
 }
 
-data class QuoteLocation(
-    var quoteLocationId: Long,
-    var locationId: Long,
-    var locationName: String,
+data class QuoteInterventionZone(
+    var quoteInterventionZoneId: Long,
+    var interventionZoneId: Long,
+    var interventionZoneName: String,
     var trapping: Boolean,
     var scaring: Boolean
 ) {
     companion object {
-        fun from(location: Location): QuoteLocation {
-            return QuoteLocation(0L, location.locationId, location.name, location.trapping, location.scaring)
+        fun from(interventionZone: InterventionZone): QuoteInterventionZone {
+            return QuoteInterventionZone(0L, interventionZone.interventionZoneId, interventionZone.name, interventionZone.trapping, interventionZone.scaring)
         }
     }
 }

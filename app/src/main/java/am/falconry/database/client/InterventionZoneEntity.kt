@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "location",
+@Entity(tableName = "intervention_zone",
         foreignKeys = [
                 ForeignKey(
                         entity = ClientEntity::class,
@@ -16,9 +16,9 @@ import androidx.room.PrimaryKey
                 )
         ]
 )
-data class LocationEntity(
+data class InterventionZoneEntity(
         @PrimaryKey(autoGenerate = true)
-        var locationId: Long = 0L,
+        var interventionZoneId: Long = 0L,
 
         var clientId: Long = 0L,
 

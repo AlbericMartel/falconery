@@ -14,23 +14,23 @@ interface QuoteDatabaseDao {
 
     @Transaction
     @Query("SELECT * FROM quote WHERE quoteId = :quoteId")
-    fun getQuote(quoteId: Long): LiveData<QuoteAndClientAndQuoteLocations?>
+    fun getQuote(quoteId: Long): LiveData<QuoteAndClientAndQuoteInterventionZones?>
 
     @Transaction
     @Query("SELECT * FROM quote where clientId = :clientId")
-    fun getAllQuotesForClient(clientId: Long): LiveData<List<QuoteAndClientAndQuoteLocations>>
+    fun getAllQuotesForClient(clientId: Long): LiveData<List<QuoteAndClientAndQuoteInterventionZones>>
 
     @Transaction
     @Query("SELECT * FROM quote")
-    fun getAllQuotes(): LiveData<List<QuoteAndClientAndQuoteLocations>>
+    fun getAllQuotes(): LiveData<List<QuoteAndClientAndQuoteInterventionZones>>
 
     @Insert
-    fun insertQuoteLocation(intervention: QuoteLocationEntity): Long
+    fun insertQuoteInterventionZone(intervention: QuoteInterventionZoneEntity): Long
 
     @Update
-    fun updateQuoteLocation(intervention: QuoteLocationEntity)
+    fun updateQuoteInterventionZone(intervention: QuoteInterventionZoneEntity)
 
-    @Query("SELECT * FROM quote_location WHERE quoteId = :quoteId")
-    fun getQuoteLocations(quoteId: Long): LiveData<List<QuoteLocationEntity>>
+    @Query("SELECT * FROM quote_intervention_zone WHERE quoteId = :quoteId")
+    fun getQuoteInterventionZones(quoteId: Long): LiveData<List<QuoteInterventionZoneEntity>>
 
 }

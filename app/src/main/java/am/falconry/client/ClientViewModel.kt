@@ -1,7 +1,7 @@
 package am.falconry.client
 
 import am.falconry.database.client.ClientRepository
-import am.falconry.domain.Location
+import am.falconry.domain.InterventionZone
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,17 +17,17 @@ class ClientViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var client = repository.getClient(clientId)
-    var loadedLocations: LiveData<List<Location>> = repository.getClientLocations(clientId)
-    var locations = MutableLiveData<MutableList<Location>>()
+    var loadedInterventionZones: LiveData<List<InterventionZone>> = repository.getClientInterventionZones(clientId)
+    var interventionZones = MutableLiveData<MutableList<InterventionZone>>()
 
     private val _navigateToClientList = MutableLiveData<Boolean>()
     val navigateToClientList: LiveData<Boolean>
         get() = _navigateToClientList
 
-    fun newClientLocation() {
-        val currentLocations: MutableList<Location>? = locations.value
-        currentLocations?.add(Location.newLocation())?.also {
-            locations.value = currentLocations
+    fun newClientInterventionZone() {
+        val currentInterventionZones: MutableList<InterventionZone>? = interventionZones.value
+        currentInterventionZones?.add(InterventionZone.newInterventionZone())?.also {
+            interventionZones.value = currentInterventionZones
         }
     }
 
@@ -45,10 +45,10 @@ class ClientViewModel(
     private fun saveClient() {
         if (client.value == null) return
 
-        val areAllLocationsValid = locations.value?.all { location -> isLocationValid(location) } ?: true
-        if (areAllLocationsValid) {
-            val updatedLocations = locations.value ?: mutableListOf()
-            repository.saveClient(client.value!!, updatedLocations)
+        val areAllInterventionZonesValid = interventionZones.value?.all { interventionZone -> isInterventionZoneValid(interventionZone) } ?: true
+        if (areAllInterventionZonesValid) {
+            val updatedInterventionZones = interventionZones.value ?: mutableListOf()
+            repository.saveClient(client.value!!, updatedInterventionZones)
         }
     }
 
@@ -62,20 +62,20 @@ class ClientViewModel(
         return false
     }
 
-    private fun isLocationValid(location: Location): Boolean {
-        return location.name.isNotBlank()
+    private fun isInterventionZoneValid(interventionZone: InterventionZone): Boolean {
+        return interventionZone.name.isNotBlank()
     }
 
     fun doneNavigatingToClientList() {
         _navigateToClientList.value = null
     }
 
-    fun updateTrappingOption(locationId: Long, checked: Boolean) {
-        locations.value?.first { it.locationId == locationId }.also { it?.trapping = checked }
+    fun updateTrappingOption(interventionZoneId: Long, checked: Boolean) {
+        interventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.trapping = checked }
     }
 
-    fun updateScaringOption(locationId: Long, checked: Boolean) {
-        locations.value?.first { it.locationId == locationId }.also { it?.scaring = checked }
+    fun updateScaringOption(interventionZoneId: Long, checked: Boolean) {
+        interventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.scaring = checked }
     }
 
     override fun onCleared() {

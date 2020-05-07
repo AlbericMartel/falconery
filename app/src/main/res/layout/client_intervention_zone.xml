@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="clientLocation"
-            type="am.falconry.domain.Location" />
+            name="clientInterventionZone"
+            type="am.falconry.domain.InterventionZone" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,13 +14,13 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/locationText"
+            android:id="@+id/interventionZoneText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="@={clientLocation.name}"
+            android:text="@={clientInterventionZone.name}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Emplacement" />
@@ -30,10 +30,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/locationText"
-            app:layout_constraintStart_toEndOf="@+id/locationText"
+            app:layout_constraintBottom_toBottomOf="@+id/interventionZoneText"
+            app:layout_constraintStart_toEndOf="@+id/interventionZoneText"
             app:layout_constraintTop_toTopOf="parent"
-            android:checked="@={clientLocation.trapping}"
+            android:checked="@={clientInterventionZone.trapping}"
             android:button="@drawable/ic_cage_24_toggle"/>
 
         <CheckBox
@@ -41,11 +41,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/locationText"
+            app:layout_constraintBottom_toBottomOf="@+id/interventionZoneText"
             app:layout_constraintStart_toEndOf="@+id/trapping"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            android:checked="@={clientLocation.scaring}"
+            android:checked="@={clientInterventionZone.scaring}"
             android:button="@drawable/ic_eagle_24_toggle"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

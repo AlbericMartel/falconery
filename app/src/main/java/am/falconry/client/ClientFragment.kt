@@ -40,7 +40,7 @@ class ClientFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.clientViewModel = viewModel
 
-        setupLocationsObservers(viewModel, binding)
+        setupInterventionZonesObservers(viewModel, binding)
 
         viewModel.navigateToClientList.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -53,22 +53,22 @@ class ClientFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupLocationsObservers(viewModel: ClientViewModel, binding: FragmentClientBinding) {
-        val adapter = ClientLocationAdapter(
-            LocationOptionClickListener { locationId, checked ->
-                viewModel.updateTrappingOption(locationId, checked)
-            }, LocationOptionClickListener { locationId, checked ->
-                viewModel.updateScaringOption(locationId, checked)
+    private fun setupInterventionZonesObservers(viewModel: ClientViewModel, binding: FragmentClientBinding) {
+        val adapter = ClientInterventionZoneAdapter(
+            InterventionZoneOptionClickListener { interventionZoneId, checked ->
+                viewModel.updateTrappingOption(interventionZoneId, checked)
+            }, InterventionZoneOptionClickListener { interventionZoneId, checked ->
+                viewModel.updateScaringOption(interventionZoneId, checked)
             })
-        binding.locationsList.adapter = adapter
+        binding.interventionZonesList.adapter = adapter
 
-        viewModel.loadedLocations.observe(viewLifecycleOwner, Observer {
+        viewModel.loadedInterventionZones.observe(viewLifecycleOwner, Observer {
             it?.let {
-                viewModel.locations.value = it.toMutableList()
+                viewModel.interventionZones.value = it.toMutableList()
             }
         })
 
-        viewModel.locations.observe(viewLifecycleOwner, Observer {
+        viewModel.interventionZones.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.data = it
             }

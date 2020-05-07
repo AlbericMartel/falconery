@@ -10,9 +10,9 @@ import java.time.LocalDate
     tableName = "quote_intervention",
     foreignKeys = [
         ForeignKey(
-            entity = QuoteLocationEntity::class,
-            parentColumns = ["quoteLocationId"],
-            childColumns = ["quoteLocationId"],
+            entity = QuoteInterventionZoneEntity::class,
+            parentColumns = ["quoteInterventionZoneId"],
+            childColumns = ["quoteInterventionZoneId"],
             onDelete = CASCADE
         )
     ]
@@ -21,7 +21,7 @@ data class QuoteInterventionEntity(
     @PrimaryKey(autoGenerate = true)
     var interventionId: Long = 0L,
 
-    var quoteLocationId: Long = 0L,
+    var quoteInterventionZoneId: Long = 0L,
 
     var date: LocalDate = LocalDate.now()
 )

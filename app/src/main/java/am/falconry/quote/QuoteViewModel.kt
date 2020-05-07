@@ -3,8 +3,8 @@ package am.falconry.quote
 import am.falconry.database.client.ClientRepository
 import am.falconry.database.quote.QuoteRepository
 import am.falconry.domain.Client
-import am.falconry.domain.Location
-import am.falconry.domain.QuoteLocation
+import am.falconry.domain.InterventionZone
+import am.falconry.domain.QuoteInterventionZone
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -23,15 +23,15 @@ class QuoteViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private val selectedClient = MutableLiveData<Client?>()
-    private val selectedLocation = MutableLiveData<Location?>()
+    private val selectedInterventionZone = MutableLiveData<InterventionZone?>()
 
     private val _clients = clientRepository.getAllClients()
-    private var _clientLocations = selectClientLocations()
+    private var _clientInterventionZones = selectClientInterventionZones()
     val clientNames = selectClientNames()
-    val locationNames = selectLocationNames()
+    val interventionZoneNames = selectInterventionZoneNames()
 
     var quote = quoteRepository.getQuote(quoteId)
-    val quoteLocations = MutableLiveData<MutableList<QuoteLocation>>()
+    val quoteInterventionZones = MutableLiveData<MutableList<QuoteInterventionZone>>()
 
     private val _navigateToQuoteList = MutableLiveData<Boolean>()
     val navigateToQuoteList: LiveData<Boolean>
@@ -41,27 +41,27 @@ class QuoteViewModel(
         selectedClient.value = _clients.value?.first { it.name == clientName }
     }
 
-    fun onSelectLocation(locationName: String) {
-        selectedLocation.value = _clientLocations.value?.first { it.name == locationName }
+    fun onSelectInterventionZone(interventionZoneName: String) {
+        selectedInterventionZone.value = _clientInterventionZones.value?.first { it.name == interventionZoneName }
     }
 
-    fun addQuoteLocation() {
-        selectedLocation.value?.let {
-            val quoteLocations = this.quoteLocations.value ?: mutableListOf()
+    fun addQuoteInterventionZone() {
+        selectedInterventionZone.value?.let {
+            val quoteInterventionZones = this.quoteInterventionZones.value ?: mutableListOf()
 
-            if (locationNotAlreadyAdded(quoteLocations, it)) {
-                quoteLocations.add(QuoteLocation.from(it))
-                this.quoteLocations.value = quoteLocations
+            if (interventionZoneNotAlreadyAdded(quoteInterventionZones, it)) {
+                quoteInterventionZones.add(QuoteInterventionZone.from(it))
+                this.quoteInterventionZones.value = quoteInterventionZones
             }
         }
     }
 
-    fun updateTrappingOption(locationId: Long, checked: Boolean) {
-        quoteLocations.value?.first { it.locationId == locationId }.also { it?.trapping = checked }
+    fun updateTrappingOption(interventionZoneId: Long, checked: Boolean) {
+        quoteInterventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.trapping = checked }
     }
 
-    fun updateScaringOption(locationId: Long, checked: Boolean) {
-        quoteLocations.value?.first { it.locationId == locationId }.also { it?.scaring = checked }
+    fun updateScaringOption(interventionZoneId: Long, checked: Boolean) {
+        quoteInterventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.scaring = checked }
     }
 
     fun trySaveQuote() {
@@ -77,10 +77,10 @@ class QuoteViewModel(
         _navigateToQuoteList.value = null
     }
 
-    private fun locationNotAlreadyAdded(
-        quoteLocations: MutableList<QuoteLocation>,
-        location: Location
-    ) = quoteLocations.none { intervention -> intervention.locationId == location.locationId }
+    private fun interventionZoneNotAlreadyAdded(
+        quoteInterventionZones: MutableList<QuoteInterventionZone>,
+        interventionZone: InterventionZone
+    ) = quoteInterventionZones.none { intervention -> intervention.interventionZoneId == interventionZone.interventionZoneId }
 
     private fun saveQuote() {
         val client = selectedClient.value
@@ -89,20 +89,20 @@ class QuoteViewModel(
         if (client != null && editedQuote != null) {
             editedQuote.clientId = client.clientId
 
-            val areAllLocationsValid = quoteLocations.value?.distinctBy { it.locationName }?.size == quoteLocations.value?.size ?: true
-            if (areAllLocationsValid) {
-                val updatedLocations = quoteLocations.value ?: mutableListOf()
-                quoteRepository.saveQuoteLocations(editedQuote, updatedLocations)
+            val areAllInterventionZonesValid = quoteInterventionZones.value?.distinctBy { it.interventionZoneName }?.size == quoteInterventionZones.value?.size ?: true
+            if (areAllInterventionZonesValid) {
+                val updatedInterventionZones = quoteInterventionZones.value ?: mutableListOf()
+                quoteRepository.saveQuoteInterventionZones(editedQuote, updatedInterventionZones)
             }
         }
     }
 
-    private fun selectClientLocations(): LiveData<List<Location>> {
+    private fun selectClientInterventionZones(): LiveData<List<InterventionZone>> {
         return Transformations.switchMap(selectedClient) {
             if (it == null) {
                 MutableLiveData()
             } else {
-                clientRepository.getClientLocations(it.clientId)
+                clientRepository.getClientInterventionZones(it.clientId)
             }
         }
     }
@@ -113,9 +113,9 @@ class QuoteViewModel(
         }
     }
 
-    private fun selectLocationNames(): LiveData<List<String>> {
-        return Transformations.map(_clientLocations) {
-            it?.map { location -> location.name } ?: listOf()
+    private fun selectInterventionZoneNames(): LiveData<List<String>> {
+        return Transformations.map(_clientInterventionZones) {
+            it?.map { interventionZone -> interventionZone.name } ?: listOf()
         }
     }
 

@@ -22,14 +22,14 @@ interface ClientDatabaseDao {
     fun getAllClients(): LiveData<List<ClientEntity>>
 
     @Insert
-    fun insertLocation(location: LocationEntity): Long
+    fun insertInterventionZone(interventionZone: InterventionZoneEntity): Long
 
     @Update
-    fun updateLocation(location: LocationEntity)
+    fun updateInterventionZone(interventionZone: InterventionZoneEntity)
 
-    @Query("SELECT * from location WHERE locationId = :locationId")
-    fun getLocation(locationId: Long): LocationEntity?
+    @Query("SELECT * from intervention_zone WHERE interventionZoneId = :interventionZoneId")
+    fun getInterventionZone(interventionZoneId: Long): InterventionZoneEntity?
 
-    @Query("SELECT * FROM location WHERE clientId = :clientId ORDER BY name DESC")
-    fun getAllClientLocations(clientId: Long): LiveData<List<LocationEntity>>
+    @Query("SELECT * FROM intervention_zone WHERE clientId = :clientId ORDER BY name DESC")
+    fun getAllClientInterventionZones(clientId: Long): LiveData<List<InterventionZoneEntity>>
 }

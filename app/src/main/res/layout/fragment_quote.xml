@@ -62,19 +62,19 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:id="@+id/locationSelectLayout"
+                android:id="@+id/linterventionZoneSelectLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="@string/clientLocation"
-                app:layout_constraintEnd_toStartOf="@id/addLocation"
+                android:hint="@string/clientInterventionZone"
+                app:layout_constraintEnd_toStartOf="@id/addInterventionZone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clientSelectLayout">
 
                 <AutoCompleteTextView
-                    android:id="@+id/locationSelect"
+                    android:id="@+id/intervention_zone_select"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -83,29 +83,29 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/addLocation"
+                android:id="@+id/addInterventionZone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/ic_plus_24"
                 style="@style/Widget.App.Button.UnelevatedButton.IconOnly"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/locationSelectLayout"
+                app:layout_constraintBottom_toBottomOf="@+id/linterventionZoneSelectLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:onClick="@{() -> viewModel.addQuoteLocation()}"/>
+                android:onClick="@{() -> viewModel.addQuoteInterventionZone()}"/>
 
             <TextView
-                android:id="@+id/quoteLocations"
+                android:id="@+id/quoteInterventionZones"
                 style="@style/formLabelStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/locations"
+                android:text="@string/interventionZones"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationSelectLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/linterventionZoneSelectLayout" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/locationsList"
+                android:id="@+id/interventionZonesList"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
@@ -115,7 +115,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/saveQuoteButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/quoteLocations">
+                app:layout_constraintTop_toBottomOf="@+id/quoteInterventionZones">
             </androidx.recyclerview.widget.RecyclerView>
 
             <Button

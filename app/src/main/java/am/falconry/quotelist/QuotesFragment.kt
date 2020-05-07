@@ -35,12 +35,12 @@ class QuotesFragment : Fragment() {
 
         setupQuotesList(binding)
 
-        viewModel.navigateToQuote.observe(viewLifecycleOwner, Observer { quoteId ->
+        viewModel.navigateToQuoteInterventionZoneConf.observe(viewLifecycleOwner, Observer { quoteId ->
             quoteId?.let {
                 this.findNavController().navigate(
                     HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToQuoteFragment()
                 )
-                viewModel.onQuoteDetailNavigated()
+                viewModel.onQuoteInterventionZoneConfNavigated()
             }
         })
 
