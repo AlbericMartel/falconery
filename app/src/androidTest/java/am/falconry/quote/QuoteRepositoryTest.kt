@@ -88,7 +88,7 @@ class QuoteRepositoryTest {
         val interventionZone = givenInterventionZoneEntity(getClient(clientId), "interventionZone1")
         val interventionZone1Id = clientDao.insertInterventionZone(interventionZone)
         val quoteId = quoteDao.insertQuote(givenQuoteEntity(clientId))
-        val quoteInterventionZone1Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone1Id, interventionZone.trapping, interventionZone.scaring))
+        val quoteInterventionZone1Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone1Id))
 
         val quote = getValue(quoteRepository.getQuote(quoteId))
 
@@ -101,8 +101,6 @@ class QuoteRepositoryTest {
         assertThat(quoteInterventionZones[0].quoteInterventionZoneId).isEqualTo(quoteInterventionZone1Id)
         assertThat(quoteInterventionZones[0].interventionZoneId).isEqualTo(interventionZone1Id)
         assertThat(quoteInterventionZones[0].interventionZoneName).isEqualTo("interventionZone1")
-        assertThat(quoteInterventionZones[0].trapping).isTrue()
-        assertThat(quoteInterventionZones[0].scaring).isTrue()
     }
 
     @Test
@@ -114,8 +112,8 @@ class QuoteRepositoryTest {
         val interventionZone2 = givenInterventionZoneEntity(getClient(clientId), "interventionZone2")
         val interventionZone2Id = clientDao.insertInterventionZone(interventionZone2)
         val quoteId = quoteDao.insertQuote(givenQuoteEntity(clientId))
-        val quoteInterventionZone1Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone1Id, interventionZone1.trapping, interventionZone1.scaring))
-        val quoteInterventionZone2Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone2Id, interventionZone2.trapping, interventionZone2.scaring))
+        val quoteInterventionZone1Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone1Id))
+        val quoteInterventionZone2Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone2Id))
 
         val quotes = getValue(quoteRepository.getAllQuotes())
 
@@ -129,13 +127,9 @@ class QuoteRepositoryTest {
         assertThat(quoteInterventionZones[0].quoteInterventionZoneId).isEqualTo(quoteInterventionZone1Id)
         assertThat(quoteInterventionZones[0].interventionZoneId).isEqualTo(interventionZone1Id)
         assertThat(quoteInterventionZones[0].interventionZoneName).isEqualTo("interventionZone1")
-        assertThat(quoteInterventionZones[0].trapping).isTrue()
-        assertThat(quoteInterventionZones[0].scaring).isTrue()
         assertThat(quoteInterventionZones[1].quoteInterventionZoneId).isEqualTo(quoteInterventionZone2Id)
         assertThat(quoteInterventionZones[1].interventionZoneId).isEqualTo(interventionZone2Id)
         assertThat(quoteInterventionZones[1].interventionZoneName).isEqualTo("interventionZone2")
-        assertThat(quoteInterventionZones[1].trapping).isTrue()
-        assertThat(quoteInterventionZones[1].scaring).isTrue()
     }
 
     @Test
@@ -168,8 +162,6 @@ class QuoteRepositoryTest {
 
         val interventionZone = InterventionZone.newInterventionZone()
         interventionZone.interventionZoneId = interventionZoneId
-        interventionZone.trapping = true
-        interventionZone.scaring = true
         val quoteInterventionZone = QuoteInterventionZone.from(interventionZone)
 
         quoteRepository.saveQuoteInterventionZones(quote, mutableListOf(quoteInterventionZone))
@@ -182,8 +174,6 @@ class QuoteRepositoryTest {
         assertThat(savedQuote.quoteInterventionZones).hasSize(1)
         val savedQuoteInterventionZone = savedQuote.quoteInterventionZones[0]
         assertThat(savedQuoteInterventionZone.interventionZoneName).isEqualTo("interventionZone1")
-        assertThat(savedQuoteInterventionZone.trapping).isTrue()
-        assertThat(savedQuoteInterventionZone.scaring).isTrue()
     }
 
     private fun getClient(clientId: Long) = getValue(clientDao.getClient(clientId))!!
@@ -200,8 +190,6 @@ class QuoteRepositoryTest {
         val interventionZone = InterventionZoneEntity()
         interventionZone.clientId = client.clientId
         interventionZone.name = name
-        interventionZone.trapping = true
-        interventionZone.scaring = true
 
         return interventionZone
     }
@@ -214,12 +202,10 @@ class QuoteRepositoryTest {
         return quote
     }
 
-    private fun givenQuoteInterventionZoneEntity(quoteId: Long, interventionZoneId: Long, trapping: Boolean, scaring: Boolean): QuoteInterventionZoneEntity {
+    private fun givenQuoteInterventionZoneEntity(quoteId: Long, interventionZoneId: Long): QuoteInterventionZoneEntity {
         val quoteInterventionZone = QuoteInterventionZoneEntity()
         quoteInterventionZone.quoteId = quoteId
         quoteInterventionZone.interventionZoneId = interventionZoneId
-        quoteInterventionZone.trapping = trapping
-        quoteInterventionZone.scaring = scaring
 
         return quoteInterventionZone
     }

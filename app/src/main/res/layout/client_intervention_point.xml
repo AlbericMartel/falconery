@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="clientInterventionZone"
-            type="am.falconry.domain.InterventionZone" />
+            name="clientInterventionPoint"
+            type="am.falconry.domain.InterventionPoint" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_marginStart="16dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="@={clientInterventionZone.name}"
+            android:text="@={clientInterventionPoint.name}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Emplacement" />

@@ -18,17 +18,17 @@ class ClientViewModel(
 
     var client = repository.getClient(clientId)
     var loadedInterventionZones: LiveData<List<InterventionZone>> = repository.getClientInterventionZones(clientId)
-    var interventionZones = MutableLiveData<MutableList<InterventionZone>>()
 
-    private val _navigateToClientList = MutableLiveData<Boolean>()
-    val navigateToClientList: LiveData<Boolean>
-        get() = _navigateToClientList
+    private val _goToClientList = MutableLiveData<Boolean>()
+    val goToClientList: LiveData<Boolean>
+        get() = _goToClientList
+
+    private val _goToNewInterventionZoneForClientId = MutableLiveData<Long>()
+    val goToNewInterventionZoneForClientId: LiveData<Long>
+        get() = _goToNewInterventionZoneForClientId
 
     fun newClientInterventionZone() {
-        val currentInterventionZones: MutableList<InterventionZone>? = interventionZones.value
-        currentInterventionZones?.add(InterventionZone.newInterventionZone())?.also {
-            interventionZones.value = currentInterventionZones
-        }
+        trySaveClientAndNavigateToInterventionZone()
     }
 
     fun trySaveClient() {
@@ -38,18 +38,23 @@ class ClientViewModel(
                     saveClient()
                 }
             }
-            _navigateToClientList.value = true
+            _goToClientList.value = true
         }
     }
 
-    private fun saveClient() {
-        if (client.value == null) return
-
-        val areAllInterventionZonesValid = interventionZones.value?.all { interventionZone -> isInterventionZoneValid(interventionZone) } ?: true
-        if (areAllInterventionZonesValid) {
-            val updatedInterventionZones = interventionZones.value ?: mutableListOf()
-            repository.saveClient(client.value!!, updatedInterventionZones)
+    fun trySaveClientAndNavigateToInterventionZone() {
+        if (isClientValid()) {
+            uiScope.launch {
+                val clientId = withContext(Dispatchers.IO) {
+                    saveClient()
+                }
+                _goToNewInterventionZoneForClientId.value = clientId
+            }
         }
+    }
+
+    private fun saveClient(): Long {
+        return repository.saveClient(client.value!!)
     }
 
     private fun isClientValid(): Boolean {
@@ -62,20 +67,12 @@ class ClientViewModel(
         return false
     }
 
-    private fun isInterventionZoneValid(interventionZone: InterventionZone): Boolean {
-        return interventionZone.name.isNotBlank()
+    fun doneGoToClientList() {
+        _goToClientList.value = null
     }
 
-    fun doneNavigatingToClientList() {
-        _navigateToClientList.value = null
-    }
-
-    fun updateTrappingOption(interventionZoneId: Long, checked: Boolean) {
-        interventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.trapping = checked }
-    }
-
-    fun updateScaringOption(interventionZoneId: Long, checked: Boolean) {
-        interventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.scaring = checked }
+    fun doneGoToNewInterventionZoneForClientId() {
+        _goToNewInterventionZoneForClientId.value = null
     }
 
     override fun onCleared() {

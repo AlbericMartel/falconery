@@ -17,13 +17,11 @@ data class Quote(
 data class QuoteInterventionZone(
     var quoteInterventionZoneId: Long,
     var interventionZoneId: Long,
-    var interventionZoneName: String,
-    var trapping: Boolean,
-    var scaring: Boolean
+    var interventionZoneName: String
 ) {
     companion object {
         fun from(interventionZone: InterventionZone): QuoteInterventionZone {
-            return QuoteInterventionZone(0L, interventionZone.interventionZoneId, interventionZone.name, interventionZone.trapping, interventionZone.scaring)
+            return QuoteInterventionZone(0L, interventionZone.interventionZoneId, interventionZone.name)
         }
     }
 }

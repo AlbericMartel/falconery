@@ -6,10 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class QuoteInterventionZonesAdapter(
-    private val trappingClickListener: QuoteInterventionZoneOptionClickListener,
-    private val scaringClickListener: QuoteInterventionZoneOptionClickListener
-) : RecyclerView.Adapter<QuoteInterventionZonesAdapter.ViewHolder>() {
+class QuoteInterventionZonesAdapter : RecyclerView.Adapter<QuoteInterventionZonesAdapter.ViewHolder>() {
 
     var data = listOf<QuoteInterventionZone>()
         set(value) {
@@ -21,7 +18,7 @@ class QuoteInterventionZonesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item, trappingClickListener, scaringClickListener)
+        holder.bind(item)
     }
 
 
@@ -31,14 +28,8 @@ class QuoteInterventionZonesAdapter(
 
     class ViewHolder private constructor(val binding: QuoteInterventionZoneBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: QuoteInterventionZone, trappingClickListener: QuoteInterventionZoneOptionClickListener, scaringClickListener: QuoteInterventionZoneOptionClickListener) {
+        fun bind(item: QuoteInterventionZone) {
             binding.quoteInterventionZone = item
-            binding.trapping.setOnCheckedChangeListener { _, isChecked ->
-                trappingClickListener.onClick(item, isChecked)
-            }
-            binding.scaring.setOnCheckedChangeListener { _, isChecked ->
-                scaringClickListener.onClick(item, isChecked)
-            }
             binding.executePendingBindings()
         }
 
@@ -50,8 +41,4 @@ class QuoteInterventionZonesAdapter(
             }
         }
     }
-}
-
-class QuoteInterventionZoneOptionClickListener(val clickListener: (interventionZoneId: Long, checked: Boolean) -> Unit) {
-    fun onClick(quoteInterventionZone: QuoteInterventionZone, checked: Boolean) = clickListener(quoteInterventionZone.interventionZoneId, checked)
 }

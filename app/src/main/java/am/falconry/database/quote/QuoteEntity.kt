@@ -1,10 +1,7 @@
 package am.falconry.database.quote
 
 import am.falconry.database.client.ClientEntity
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(tableName = "quote",
     foreignKeys = [
@@ -14,7 +11,11 @@ import androidx.room.PrimaryKey
             childColumns = ["clientId"],
             onDelete = ForeignKey.CASCADE
         )
-    ])
+    ],
+    indices = [
+        Index("clientId")
+    ]
+)
 data class QuoteEntity(
     @PrimaryKey(autoGenerate = true)
     var quoteId: Long = 0L,

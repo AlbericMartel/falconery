@@ -47,7 +47,7 @@ class QuoteRepository(database: FalconryDatabase) {
 
     private fun toDomainModel(quoteInterventionZones: List<QuoteInterventionZoneAndInterventionZone>): List<QuoteInterventionZone> {
         return quoteInterventionZones.map {
-            QuoteInterventionZone(it.interventionZone.interventionZoneId, it.interventionZone.interventionZoneId, it.interventionZone.name, it.interventionZone.trapping, it.interventionZone.scaring)
+            QuoteInterventionZone(it.interventionZone.interventionZoneId, it.interventionZone.interventionZoneId, it.interventionZone.name)
         }
     }
 
@@ -60,7 +60,7 @@ class QuoteRepository(database: FalconryDatabase) {
     }
 
     private fun toEntity(quoteId: Long, quoteInterventionZone: QuoteInterventionZone): QuoteInterventionZoneEntity {
-        return QuoteInterventionZoneEntity(quoteInterventionZone.quoteInterventionZoneId, quoteId, quoteInterventionZone.interventionZoneId, quoteInterventionZone.trapping, quoteInterventionZone.scaring)
+        return QuoteInterventionZoneEntity(quoteInterventionZone.quoteInterventionZoneId, quoteId, quoteInterventionZone.interventionZoneId)
     }
 
 }

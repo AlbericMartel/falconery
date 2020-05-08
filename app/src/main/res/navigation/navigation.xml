@@ -17,6 +17,16 @@
         <action
             android:id="@+id/action_clientFragment_to_homeViewPagerFragment"
             app:destination="@id/homeViewPagerFragment" />
+        <action
+            android:id="@+id/action_clientFragment_to_clientInterventionZoneFragment"
+            app:destination="@id/clientInterventionZoneFragment" >
+            <argument
+                android:name="clientId"
+                android:defaultValue="0L" />
+            <argument
+                android:name="interventionZoneId"
+                android:defaultValue="0L" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/homeViewPagerFragment"
@@ -36,5 +46,18 @@
         <action
             android:id="@+id/action_quoteFragment_to_homeViewPagerFragment"
             app:destination="@id/homeViewPagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/clientInterventionZoneFragment"
+        android:name="am.falconry.clientinterventionzone.ClientInterventionZoneFragment"
+        android:label="ClientInterventionZoneFragment" >
+        <argument android:name="clientId"
+            android:defaultValue="0L" />
+        <action
+            android:id="@+id/action_clientInterventionZoneFragment_to_clientFragment"
+            app:destination="@id/clientFragment" />
+        <argument
+            android:name="interventionZoneId"
+            android:defaultValue="0L" />
     </fragment>
 </navigation>

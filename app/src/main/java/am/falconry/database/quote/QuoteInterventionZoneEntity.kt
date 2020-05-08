@@ -4,6 +4,7 @@ import am.falconry.database.client.InterventionZoneEntity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -21,6 +22,9 @@ import androidx.room.PrimaryKey
             childColumns = ["interventionZoneId"],
             onDelete = CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["quoteId", "interventionZoneId"])
     ]
 )
 data class QuoteInterventionZoneEntity(

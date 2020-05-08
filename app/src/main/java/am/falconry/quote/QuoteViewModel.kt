@@ -56,14 +56,6 @@ class QuoteViewModel(
         }
     }
 
-    fun updateTrappingOption(interventionZoneId: Long, checked: Boolean) {
-        quoteInterventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.trapping = checked }
-    }
-
-    fun updateScaringOption(interventionZoneId: Long, checked: Boolean) {
-        quoteInterventionZones.value?.first { it.interventionZoneId == interventionZoneId }.also { it?.scaring = checked }
-    }
-
     fun trySaveQuote() {
         uiScope.launch {
             withContext(Dispatchers.IO) {

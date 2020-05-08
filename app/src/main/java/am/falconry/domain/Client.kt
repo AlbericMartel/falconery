@@ -14,13 +14,24 @@ data class Client(
 
 data class InterventionZone(
     var interventionZoneId: Long,
-    var name: String,
-    var trapping: Boolean,
-    var scaring: Boolean
+    var clientId: Long,
+    var name: String
 ) {
     companion object {
         fun newInterventionZone(): InterventionZone {
-            return InterventionZone(0L, "", trapping = false, scaring = false)
+            return InterventionZone(0L, 0L, "")
+        }
+    }
+}
+
+data class InterventionPoint(
+    var interventionPointId: Long,
+    var interventionZoneId: Long,
+    var name: String
+) {
+    companion object {
+        fun newInterventionPoint(interventionZoneId: Long): InterventionPoint {
+            return InterventionPoint(0L, interventionZoneId, "")
         }
     }
 }

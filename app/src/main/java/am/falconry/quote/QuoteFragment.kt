@@ -119,12 +119,7 @@ class QuoteFragment : Fragment() {
     }
 
     private fun setupInterventionZones() {
-        val adapter = QuoteInterventionZonesAdapter(
-            QuoteInterventionZoneOptionClickListener { interventionZoneId, checked ->
-                viewModel.updateTrappingOption(interventionZoneId, checked)
-            }, QuoteInterventionZoneOptionClickListener { interventionZoneId, checked ->
-                viewModel.updateScaringOption(interventionZoneId, checked)
-            })
+        val adapter = QuoteInterventionZonesAdapter()
         binding.interventionZonesList.adapter = adapter
 
         viewModel.quoteInterventionZones.observe(viewLifecycleOwner, Observer {

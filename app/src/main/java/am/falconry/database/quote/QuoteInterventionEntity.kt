@@ -3,6 +3,7 @@ package am.falconry.database.quote
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
@@ -15,6 +16,9 @@ import java.time.LocalDate
             childColumns = ["quoteInterventionZoneId"],
             onDelete = CASCADE
         )
+    ],
+    indices = [
+        Index("quoteInterventionZoneId")
     ]
 )
 data class QuoteInterventionEntity(

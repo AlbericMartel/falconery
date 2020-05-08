@@ -2,6 +2,7 @@ package am.falconry.database
 
 import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.ClientEntity
+import am.falconry.database.client.InterventionPointEntity
 import am.falconry.database.client.InterventionZoneEntity
 import am.falconry.database.quote.QuoteDatabaseDao
 import am.falconry.database.quote.QuoteEntity
@@ -13,7 +14,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [ClientEntity::class, InterventionZoneEntity::class, QuoteEntity::class, QuoteInterventionZoneEntity::class, QuoteInterventionEntity::class], version = 1, exportSchema = false)
+@Database(entities = [
+    ClientEntity::class,
+    InterventionZoneEntity::class,
+    InterventionPointEntity::class,
+    QuoteEntity::class,
+    QuoteInterventionZoneEntity::class,
+    QuoteInterventionEntity::class
+], version = 1, exportSchema = false)
 @TypeConverters(am.falconry.database.quote.TypeConverters::class)
 abstract class FalconryDatabase : RoomDatabase() {
 

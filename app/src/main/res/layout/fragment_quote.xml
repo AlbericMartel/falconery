@@ -16,7 +16,7 @@
         tools:context=".quote.QuoteFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/newClientLayout"
+            android:id="@+id/newQuoteLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

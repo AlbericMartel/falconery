@@ -28,8 +28,17 @@ interface ClientDatabaseDao {
     fun updateInterventionZone(interventionZone: InterventionZoneEntity)
 
     @Query("SELECT * from intervention_zone WHERE interventionZoneId = :interventionZoneId")
-    fun getInterventionZone(interventionZoneId: Long): InterventionZoneEntity?
+    fun getInterventionZone(interventionZoneId: Long): LiveData<InterventionZoneEntity?>
 
     @Query("SELECT * FROM intervention_zone WHERE clientId = :clientId ORDER BY name DESC")
     fun getAllClientInterventionZones(clientId: Long): LiveData<List<InterventionZoneEntity>>
+
+    @Query("SELECT * FROM intervention_point WHERE interventionZoneId = :interventionZoneId")
+    fun getAllInterventionPointsForInterventionZone(interventionZoneId: Long): LiveData<List<InterventionPointEntity>>
+
+    @Insert
+    fun insertInterventionPoint(interventionPoint: InterventionPointEntity): Long
+
+    @Update
+    fun updateInterventionPoint(interventionPoint: InterventionPointEntity)
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="am.falconry.client.ClientViewModel" />
+            type="am.falconry.clientinterventionzone.ClientInterventionZoneViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clientLayout"
+            android:id="@+id/clientInterventionZoneLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -38,7 +38,7 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/clientNameEditLayout"
+                android:id="@+id/zoneInterventionNameEditLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,34 +52,11 @@
                 app:layout_constraintTop_toBottomOf="@id/topAppBarLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/clientNameEdit"
+                    android:id="@+id/zoneInterventionNameEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:text="@={viewModel.client.name}" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/clientEmailEditLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/clientEmail"
-                app:endIconMode="clear_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clientNameEditLayout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/clientEmailEdit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:text="@={viewModel.client.email}" />
+                    android:text="@={viewModel.interventionZone.name}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,20 +66,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/interventionZones"
+                android:text="@string/interventionPoints"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clientEmailEditLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/zoneInterventionNameEditLayout" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/interventionZonesList"
+                android:id="@+id/interventionPointsList"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 android:paddingTop="12dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="@+id/saveClientButton"
+                app:layout_constraintBottom_toTopOf="@+id/saveInterventionZoneButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clientInterventionZones">
@@ -110,12 +87,12 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <Button
-                android:id="@+id/saveClientButton"
+                android:id="@+id/saveInterventionZoneButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:onClick="@{() -> viewModel.trySaveClient()}"
+                android:onClick="@{() -> viewModel.trySaveInterventionZone()}"
                 android:text="@string/save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -127,20 +104,20 @@
                 android:layout_height="2dp"
                 android:layout_marginStart="2dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toTopOf="@+id/interventionZonesList"
+                app:layout_constraintBottom_toTopOf="@+id/interventionPointsList"
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addClient"
+            android:id="@+id/addInterventionPoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginEnd="16dp"
-            android:onClick="@{() -> viewModel.newClientInterventionZone()}"
+            android:onClick="@{() -> viewModel.newInterventionPoint()}"
             app:srcCompat="@drawable/ic_plus_24"
-            app:layout_anchor="@+id/interventionZonesList"
+            app:layout_anchor="@+id/interventionPointsList"
             app:layout_anchorGravity="top|right|end"
             app:fabSize="mini"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

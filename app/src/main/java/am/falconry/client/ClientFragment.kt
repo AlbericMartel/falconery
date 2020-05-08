@@ -38,40 +38,24 @@ class ClientFragment : Fragment() {
         }
 
         binding.lifecycleOwner = this
-        binding.clientViewModel = viewModel
+        binding.viewModel = viewModel
 
-        setupInterventionZonesObservers(viewModel, binding)
+        viewModel.goToNewInterventionZoneForClientId.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                this.findNavController()
+                    .navigate(ClientFragmentDirections.actionClientFragmentToClientInterventionZoneFragment().setClientId(it))
+                viewModel.doneGoToNewInterventionZoneForClientId()
+            }
+        })
 
-        viewModel.navigateToClientList.observe(viewLifecycleOwner, Observer {
+        viewModel.goToClientList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 this.findNavController()
                     .navigate(ClientFragmentDirections.actionClientFragmentToHomeViewPagerFragment())
-                viewModel.doneNavigatingToClientList()
+                viewModel.doneGoToClientList()
             }
         })
 
         return binding.root
-    }
-
-    private fun setupInterventionZonesObservers(viewModel: ClientViewModel, binding: FragmentClientBinding) {
-        val adapter = ClientInterventionZoneAdapter(
-            InterventionZoneOptionClickListener { interventionZoneId, checked ->
-                viewModel.updateTrappingOption(interventionZoneId, checked)
-            }, InterventionZoneOptionClickListener { interventionZoneId, checked ->
-                viewModel.updateScaringOption(interventionZoneId, checked)
-            })
-        binding.interventionZonesList.adapter = adapter
-
-        viewModel.loadedInterventionZones.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                viewModel.interventionZones.value = it.toMutableList()
-            }
-        })
-
-        viewModel.interventionZones.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.data = it
-            }
-        })
     }
 }

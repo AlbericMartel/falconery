@@ -1,14 +1,14 @@
-package am.falconry.client
+package am.falconry.clientinterventionzone
 
-import am.falconry.databinding.ClientInterventionZoneBinding
-import am.falconry.domain.InterventionZone
+import am.falconry.databinding.ClientInterventionPointBinding
+import am.falconry.domain.InterventionPoint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class ClientInterventionZoneAdapter: RecyclerView.Adapter<ClientInterventionZoneAdapter.ViewHolder>() {
+class ClientInterventionPointAdapter : RecyclerView.Adapter<ClientInterventionPointAdapter.ViewHolder>() {
 
-    var data =  listOf<InterventionZone>()
+    var data =  listOf<InterventionPoint>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -26,17 +26,17 @@ class ClientInterventionZoneAdapter: RecyclerView.Adapter<ClientInterventionZone
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ClientInterventionZoneBinding) : RecyclerView.ViewHolder(binding.root){
+    class ViewHolder private constructor(val binding: ClientInterventionPointBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: InterventionZone) {
-            binding.clientInterventionZone = item
+        fun bind(item: InterventionPoint) {
+            binding.clientInterventionPoint = item
             binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ClientInterventionZoneBinding.inflate(layoutInflater, parent, false)
+                val binding = ClientInterventionPointBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

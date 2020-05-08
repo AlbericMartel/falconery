@@ -1,10 +1,7 @@
 package am.falconry.database.client
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
-import androidx.room.PrimaryKey
 
 @Entity(tableName = "intervention_zone",
         foreignKeys = [
@@ -14,6 +11,9 @@ import androidx.room.PrimaryKey
                         childColumns = ["clientId"],
                         onDelete = CASCADE
                 )
+        ],
+        indices = [
+                Index("clientId")
         ]
 )
 data class InterventionZoneEntity(
@@ -23,11 +23,5 @@ data class InterventionZoneEntity(
         var clientId: Long = 0L,
 
         @ColumnInfo(name = "name")
-        var name: String = "",
-
-        @ColumnInfo(name = "trapping")
-        var trapping: Boolean = false,
-
-        @ColumnInfo(name = "scaring")
-        var scaring: Boolean = false
+        var name: String = ""
 )

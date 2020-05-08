@@ -6,6 +6,7 @@
     <string name="clientName">Nom</string>
     <string name="clientEmail">Email</string>
     <string name="interventionZones">Zones d\'intervention</string>
+    <string name="interventionPoints">Points d\'intervention</string>
     <string name="clientInterventionZone">Zone d\'intervention</string>
     <string name="save">Enregistrer</string>
     <string name="cancel">Annuler</string>
