@@ -28,10 +28,10 @@ class ClientInterventionZoneFragment : Fragment() {
         val arguments = ClientInterventionZoneFragmentArgs.fromBundle(requireArguments())
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client_intervention_zone, container, false)
         val repository = ClientRepository(FalconryDatabase.getInstance(application))
-        val viewModelFactory = ClientInterventionZoneViewModelFactory(arguments.clientId, arguments.interventionZoneId, repository)
+        val viewModelFactory = ClientInterventionZoneViewModelFactory(arguments.interventionZoneParams, repository)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ClientInterventionZoneViewModel::class.java)
 
-        binding.topAppBar.setNavigationOnClickListener { goToClientFragment(arguments.clientId) }
+        binding.topAppBar.setNavigationOnClickListener { goToClientFragment(arguments.interventionZoneParams.clientId) }
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel

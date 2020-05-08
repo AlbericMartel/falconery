@@ -33,6 +33,12 @@ class ClientsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        setupClientsList(viewModel, binding)
+
+        return binding.root
+    }
+
+    private fun setupClientsList(viewModel: ClientsViewModel, binding: FragmentClientsBinding) {
         val adapter = ClientsAdapter(ClientClickListener { clientId ->
             viewModel.onClientClicked(clientId)
         })
@@ -53,7 +59,5 @@ class ClientsFragment : Fragment() {
                 viewModel.onClientDetailNavigated()
             }
         })
-
-        return binding.root
     }
 }

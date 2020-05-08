@@ -9,8 +9,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 
 class ClientInterventionZoneViewModel(
-    private val clientId: Long,
-    private val interventionZoneId: Long,
+    private val params: InterventionZoneParams,
     private val repository: ClientRepository
 ) : ViewModel() {
 
@@ -18,7 +17,7 @@ class ClientInterventionZoneViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var interventionZone = loadInterventionZone()
-    var loadedInterventionPoints: LiveData<List<InterventionPoint>> = repository.getZoneInterventionPoints(interventionZoneId)
+    var loadedInterventionPoints: LiveData<List<InterventionPoint>> = repository.getZoneInterventionPoints(params.interventionZoneId)
     var interventionPoints = MutableLiveData<MutableList<InterventionPoint>>()
 
     private val _goToClient = MutableLiveData<Long>()
@@ -27,13 +26,13 @@ class ClientInterventionZoneViewModel(
 
     fun newInterventionPoint() {
         val currentInterventionPoints: MutableList<InterventionPoint>? = interventionPoints.value
-        currentInterventionPoints?.add(InterventionPoint.newInterventionPoint(interventionZoneId))?.also {
+        currentInterventionPoints?.add(InterventionPoint.newInterventionPoint(params.interventionZoneId))?.also {
             interventionPoints.value = currentInterventionPoints
         }
     }
 
     private fun loadInterventionZone(): LiveData<InterventionZone> {
-        return repository.getInterventionZoneByIdOrNewForClient(interventionZoneId, clientId)
+        return repository.getInterventionZoneByIdOrNewForClient(params.interventionZoneId, params.clientId)
     }
 
     fun trySaveInterventionZone() {
@@ -42,7 +41,7 @@ class ClientInterventionZoneViewModel(
                 withContext(Dispatchers.IO) {
                     saveInterventionZone()
                 }
-                _goToClient.value = clientId//TO change
+                _goToClient.value = params.clientId
             }
         }
     }
@@ -51,7 +50,7 @@ class ClientInterventionZoneViewModel(
         val areAllInterventionPointsValid = interventionPoints.value?.all { interventionPoint -> isInterventionPointValid(interventionPoint) } ?: true
         if (areAllInterventionPointsValid) {
             val updatedInterventionPoints = interventionPoints.value ?: mutableListOf()
-            repository.saveInterventionZone(clientId, interventionZone.value!!, updatedInterventionPoints)
+            repository.saveInterventionZone(params.clientId, interventionZone.value!!, updatedInterventionPoints)
         }
     }
 

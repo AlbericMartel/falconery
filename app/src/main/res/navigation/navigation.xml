@@ -51,13 +51,11 @@
         android:id="@+id/clientInterventionZoneFragment"
         android:name="am.falconry.clientinterventionzone.ClientInterventionZoneFragment"
         android:label="ClientInterventionZoneFragment" >
-        <argument android:name="clientId"
-            android:defaultValue="0L" />
         <action
             android:id="@+id/action_clientInterventionZoneFragment_to_clientFragment"
             app:destination="@id/clientFragment" />
         <argument
-            android:name="interventionZoneId"
-            android:defaultValue="0L" />
+            android:name="interventionZoneParams"
+            app:argType="am.falconry.clientinterventionzone.InterventionZoneParams" />
     </fragment>
 </navigation>

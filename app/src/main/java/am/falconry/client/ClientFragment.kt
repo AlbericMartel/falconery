@@ -34,19 +34,13 @@ class ClientFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
 
         binding.topAppBar.setNavigationOnClickListener { view ->
-            view.findNavController().navigateUp()
+            view.findNavController().navigate(ClientFragmentDirections.actionClientFragmentToHomeViewPagerFragment())
         }
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        viewModel.goToNewInterventionZoneForClientId.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                this.findNavController()
-                    .navigate(ClientFragmentDirections.actionClientFragmentToClientInterventionZoneFragment().setClientId(it))
-                viewModel.doneGoToNewInterventionZoneForClientId()
-            }
-        })
+        setupInterventionZonesList()
 
         viewModel.goToClientList.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -57,5 +51,26 @@ class ClientFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    private fun setupInterventionZonesList() {
+        val adapter = ClientInterventionZonesAdapter(InterventionZoneClickListener { interventionZoneId ->
+            viewModel.goToInterventionZone(interventionZoneId)
+        })
+        binding.interventionZonesList.adapter = adapter
+
+        viewModel.loadedInterventionZones.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
+
+        viewModel.goToInterventionZone.observe(viewLifecycleOwner, Observer { interventionZoneId ->
+            interventionZoneId?.let {
+                this.findNavController()
+                    .navigate(ClientFragmentDirections.actionClientFragmentToClientInterventionZoneFragment(it))
+                viewModel.doneGoToInterventionZone()
+            }
+        })
     }
 }

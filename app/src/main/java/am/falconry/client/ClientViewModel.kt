@@ -1,5 +1,6 @@
 package am.falconry.client
 
+import am.falconry.clientinterventionzone.InterventionZoneParams
 import am.falconry.database.client.ClientRepository
 import am.falconry.domain.InterventionZone
 import android.util.Patterns
@@ -9,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 
 class ClientViewModel(
-    clientId: Long = 0L,
+    private val clientId: Long = 0L,
     private val repository: ClientRepository
 ) : ViewModel() {
 
@@ -23,9 +24,9 @@ class ClientViewModel(
     val goToClientList: LiveData<Boolean>
         get() = _goToClientList
 
-    private val _goToNewInterventionZoneForClientId = MutableLiveData<Long>()
-    val goToNewInterventionZoneForClientId: LiveData<Long>
-        get() = _goToNewInterventionZoneForClientId
+    private val _goToInterventionZone = MutableLiveData<InterventionZoneParams>()
+    val goToInterventionZone: LiveData<InterventionZoneParams>
+        get() = _goToInterventionZone
 
     fun newClientInterventionZone() {
         trySaveClientAndNavigateToInterventionZone()
@@ -39,17 +40,6 @@ class ClientViewModel(
                 }
             }
             _goToClientList.value = true
-        }
-    }
-
-    fun trySaveClientAndNavigateToInterventionZone() {
-        if (isClientValid()) {
-            uiScope.launch {
-                val clientId = withContext(Dispatchers.IO) {
-                    saveClient()
-                }
-                _goToNewInterventionZoneForClientId.value = clientId
-            }
         }
     }
 
@@ -67,12 +57,27 @@ class ClientViewModel(
         return false
     }
 
-    fun doneGoToClientList() {
-        _goToClientList.value = null
+    private fun trySaveClientAndNavigateToInterventionZone() {
+        if (isClientValid()) {
+            uiScope.launch {
+                val clientId = withContext(Dispatchers.IO) {
+                    saveClient()
+                }
+                _goToInterventionZone.value = InterventionZoneParams(clientId, 0L)
+            }
+        }
     }
 
-    fun doneGoToNewInterventionZoneForClientId() {
-        _goToNewInterventionZoneForClientId.value = null
+    fun goToInterventionZone(interventionZoneId: Long) {
+        _goToInterventionZone.value = InterventionZoneParams(clientId, interventionZoneId)
+    }
+
+    fun doneGoToInterventionZone() {
+        _goToInterventionZone.value = null
+    }
+
+    fun doneGoToClientList() {
+        _goToClientList.value = null
     }
 
     override fun onCleared() {
