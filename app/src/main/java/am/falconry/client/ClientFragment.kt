@@ -36,7 +36,7 @@ class ClientFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
 
         binding.topAppBar.setNavigationOnClickListener { view ->
-            view.findNavController().navigate(ClientFragmentDirections.actionClientFragmentToHomeViewPagerFragment())
+            view.findNavController().navigate(ClientFragmentDirections.actionClientFragmentToClientsFragment())
         }
 
         binding.lifecycleOwner = this
@@ -47,7 +47,7 @@ class ClientFragment : Fragment() {
         viewModel.goToClientList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 this.findNavController()
-                    .navigate(ClientFragmentDirections.actionClientFragmentToHomeViewPagerFragment())
+                    .navigate(ClientFragmentDirections.actionClientFragmentToClientsFragment())
                 viewModel.doneGoToClientList()
             }
         })

@@ -1,6 +1,5 @@
 package am.falconry.clientlist
 
-import am.falconry.HomeViewPagerFragmentDirections
 import am.falconry.R
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientRepository
@@ -9,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,6 +35,8 @@ class ClientsFragment : Fragment() {
 
         setupClientsList(viewModel, binding)
 
+        (activity as AppCompatActivity).setSupportActionBar(binding.topAppBar)
+
         return binding.root
     }
 
@@ -52,10 +54,7 @@ class ClientsFragment : Fragment() {
 
         viewModel.navigateToClient.observe(viewLifecycleOwner, Observer { clientId ->
             clientId?.let {
-                this.findNavController().navigate(
-                    HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToClientFragment()
-                        .setClientId(clientId)
-                )
+                this.findNavController().navigate(ClientsFragmentDirections.actionClientsFragmentToClientFragment().setClientId(it))
                 viewModel.onClientDetailNavigated()
             }
         })

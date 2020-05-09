@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/homeViewPagerFragment">
+    app:startDestination="@id/clientsFragment">
 
     <fragment
         android:id="@+id/clientFragment"
@@ -14,9 +14,6 @@
             android:name="clientId"
             app:argType="long"
             android:defaultValue="0L" />
-        <action
-            android:id="@+id/action_clientFragment_to_homeViewPagerFragment"
-            app:destination="@id/homeViewPagerFragment" />
         <action
             android:id="@+id/action_clientFragment_to_clientInterventionZoneFragment"
             app:destination="@id/clientInterventionZoneFragment" >
@@ -30,25 +27,9 @@
         <action
             android:id="@+id/action_clientFragment_to_quotesFragment"
             app:destination="@id/quotesFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/homeViewPagerFragment"
-        android:name="am.falconry.HomeViewPagerFragment"
-        android:label="HomeViewPagerFragment" >
         <action
-            android:id="@+id/action_homeViewPagerFragment_to_clientFragment"
-            app:destination="@id/clientFragment" />
-        <action
-            android:id="@+id/action_homeViewPagerFragment_to_quoteFragment"
-            app:destination="@id/quoteFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/quoteFragment"
-        android:name="am.falconry.quote.QuoteFragment"
-        android:label="QuoteFragment" >
-        <action
-            android:id="@+id/action_quoteFragment_to_homeViewPagerFragment"
-            app:destination="@id/homeViewPagerFragment" />
+            android:id="@+id/action_clientFragment_to_clientsFragment"
+            app:destination="@id/clientsFragment" />
     </fragment>
     <fragment
         android:id="@+id/clientInterventionZoneFragment"
@@ -70,6 +51,14 @@
             android:defaultValue="0L" />
         <action
             android:id="@+id/action_quotesFragment_to_clientFragment"
+            app:destination="@id/clientFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/clientsFragment"
+        android:name="am.falconry.clientlist.ClientsFragment"
+        android:label="ClientsFragment" >
+        <action
+            android:id="@+id/action_clientsFragment_to_clientFragment"
             app:destination="@id/clientFragment" />
     </fragment>
 </navigation>
