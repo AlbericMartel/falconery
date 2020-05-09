@@ -4,10 +4,7 @@ import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.ClientEntity
 import am.falconry.database.client.InterventionPointEntity
 import am.falconry.database.client.InterventionZoneEntity
-import am.falconry.database.quote.QuoteDatabaseDao
-import am.falconry.database.quote.QuoteEntity
-import am.falconry.database.quote.QuoteInterventionEntity
-import am.falconry.database.quote.QuoteInterventionZoneEntity
+import am.falconry.database.quote.*
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -20,6 +17,7 @@ import androidx.room.TypeConverters
     InterventionPointEntity::class,
     QuoteEntity::class,
     QuoteInterventionZoneEntity::class,
+    QuoteEntity2::class,
     QuoteInterventionEntity::class
 ], version = 1, exportSchema = false)
 @TypeConverters(am.falconry.database.quote.TypeConverters::class)

@@ -33,4 +33,10 @@ interface QuoteDatabaseDao {
     @Query("SELECT * FROM quote_intervention_zone WHERE quoteId = :quoteId")
     fun getQuoteInterventionZones(quoteId: Long): LiveData<List<QuoteInterventionZoneEntity>>
 
+    @Insert
+    fun insertQuote(quote: QuoteEntity2): Long
+
+    @Query("SELECT * FROM quote2 WHERE quoteId = :quoteId")
+    fun getQuoteById(quoteId: Long): LiveData<QuoteEntity2>
+
 }

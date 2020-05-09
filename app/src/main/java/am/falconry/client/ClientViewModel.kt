@@ -46,7 +46,11 @@ class ClientViewModel(
     }
 
     fun createNewQuote(interventionZoneId: Long) {
-
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                quoteRepository.createNewQuote(interventionZoneId)
+            }
+        }
     }
 
     private fun saveClient(): Long {

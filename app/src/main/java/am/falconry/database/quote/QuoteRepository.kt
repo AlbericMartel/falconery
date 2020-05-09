@@ -3,6 +3,7 @@ package am.falconry.database.quote
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientEntity
 import am.falconry.domain.Quote
+import am.falconry.domain.Quote2
 import am.falconry.domain.QuoteInterventionZone
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -37,6 +38,12 @@ class QuoteRepository(database: FalconryDatabase) {
         }
     }
 
+    fun createNewQuote(interventionZoneId: Long): Long {
+        val newQuote = Quote2.newQuote(interventionZoneId)
+
+        return quoteDao.insertQuote(toEntity(newQuote))
+    }
+
     fun saveQuoteInterventionZones(quote: Quote, quoteInterventionZones: MutableList<QuoteInterventionZone>) {
         val quoteId = quoteDao.insertQuote(toEntity(quote))
 
@@ -57,6 +64,10 @@ class QuoteRepository(database: FalconryDatabase) {
 
     private fun toEntity(quote: Quote): QuoteEntity {
         return QuoteEntity(quote.quoteId, quote.clientId, quote.onGoing)
+    }
+
+    private fun toEntity(quote: Quote2): QuoteEntity2 {
+        return QuoteEntity2(quote.quoteId, quote.interventionZoneId, quote.onGoing)
     }
 
     private fun toEntity(quoteId: Long, quoteInterventionZone: QuoteInterventionZone): QuoteInterventionZoneEntity {

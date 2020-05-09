@@ -83,28 +83,6 @@ class QuoteRepositoryTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldGetSingleQuoteInterventionZone() {
-        val clientId = clientDao.insertClient(givenClientEntity())
-        val interventionZone = givenInterventionZoneEntity(getClient(clientId), "interventionZone1")
-        val interventionZone1Id = clientDao.insertInterventionZone(interventionZone)
-        val quoteId = quoteDao.insertQuote(givenQuoteEntity(clientId))
-        val quoteInterventionZone1Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone1Id))
-
-        val quote = getValue(quoteRepository.getQuote(quoteId))
-
-        assertThat(quote).isNotNull()
-        assertThat(quote.quoteId).isEqualTo(quoteId)
-        assertThat(quote.onGoing).isTrue()
-        assertThat(quote.clientName).isEqualTo("Name")
-        val quoteInterventionZones = quote.quoteInterventionZones
-        assertThat(quoteInterventionZones).hasSize(1)
-        assertThat(quoteInterventionZones[0].quoteInterventionZoneId).isEqualTo(quoteInterventionZone1Id)
-        assertThat(quoteInterventionZones[0].interventionZoneId).isEqualTo(interventionZone1Id)
-        assertThat(quoteInterventionZones[0].interventionZoneName).isEqualTo("interventionZone1")
-    }
-
-    @Test
-    @Throws(Exception::class)
     fun shouldGet2QuoteInterventions() {
         val clientId = clientDao.insertClient(givenClientEntity())
         val interventionZone1 = givenInterventionZoneEntity(getClient(clientId), "interventionZone1")
@@ -174,6 +152,21 @@ class QuoteRepositoryTest {
         assertThat(savedQuote.quoteInterventionZones).hasSize(1)
         val savedQuoteInterventionZone = savedQuote.quoteInterventionZones[0]
         assertThat(savedQuoteInterventionZone.interventionZoneName).isEqualTo("interventionZone1")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun shouldCreateNewQuote() {
+        val clientId = clientDao.insertClient(givenClientEntity())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZoneEntity(getClient(clientId), "interventionZone1"))
+
+        val quoteId = quoteRepository.createNewQuote(interventionZoneId)
+
+        val savedQuote = getValue(quoteDao.getQuoteById(quoteId))
+        assertThat(savedQuote).isNotNull()
+        assertThat(savedQuote.quoteId).isEqualTo(quoteId)
+        assertThat(savedQuote.interventionZoneId).isEqualTo(interventionZoneId)
+        assertThat(savedQuote.onGoing).isFalse()
     }
 
     private fun getClient(clientId: Long) = getValue(clientDao.getClient(clientId))!!
