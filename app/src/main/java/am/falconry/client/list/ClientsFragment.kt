@@ -1,4 +1,4 @@
-package am.falconry.clientlist
+package am.falconry.client.list
 
 import am.falconry.R
 import am.falconry.database.FalconryDatabase

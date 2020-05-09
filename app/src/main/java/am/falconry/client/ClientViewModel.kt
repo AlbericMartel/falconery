@@ -1,6 +1,6 @@
 package am.falconry.client
 
-import am.falconry.clientinterventionzone.InterventionZoneParams
+import am.falconry.client.interventionzone.InterventionZoneParams
 import am.falconry.database.client.ClientRepository
 import am.falconry.database.quote.QuoteRepository
 import am.falconry.domain.InterventionZone

@@ -33,18 +33,18 @@
     </fragment>
     <fragment
         android:id="@+id/clientInterventionZoneFragment"
-        android:name="am.falconry.clientinterventionzone.ClientInterventionZoneFragment"
+        android:name="am.falconry.client.interventionzone.ClientInterventionZoneFragment"
         android:label="ClientInterventionZoneFragment" >
         <action
             android:id="@+id/action_clientInterventionZoneFragment_to_clientFragment"
             app:destination="@id/clientFragment" />
         <argument
             android:name="interventionZoneParams"
-            app:argType="am.falconry.clientinterventionzone.InterventionZoneParams" />
+            app:argType="am.falconry.client.interventionzone.InterventionZoneParams" />
     </fragment>
     <fragment
         android:id="@+id/quotesFragment"
-        android:name="am.falconry.quotelist.QuotesFragment"
+        android:name="am.falconry.quote.list.QuotesFragment"
         android:label="QuotesFragment" >
         <argument
             android:name="clientId"
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/clientsFragment"
-        android:name="am.falconry.clientlist.ClientsFragment"
+        android:name="am.falconry.client.list.ClientsFragment"
         android:label="ClientsFragment" >
         <action
             android:id="@+id/action_clientsFragment_to_clientFragment"

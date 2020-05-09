@@ -1,4 +1,4 @@
-package am.falconry.clientinterventionzone
+package am.falconry.client.interventionzone
 
 import am.falconry.databinding.ClientInterventionPointBinding
 import am.falconry.domain.InterventionPoint

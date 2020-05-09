@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="am.falconry.clientlist.ClientsViewModel" />
+            type="am.falconry.client.list.ClientsViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layoutManager="LinearLayoutManager"
-                tools:context=".clientlist.ClientsFragment"
+                tools:context=".client.list.ClientsFragment"
                 tools:listitem="@layout/client"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

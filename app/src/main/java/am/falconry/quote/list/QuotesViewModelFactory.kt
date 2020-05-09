@@ -1,4 +1,4 @@
-package am.falconry.quotelist
+package am.falconry.quote.list
 
 import am.falconry.database.quote.QuoteRepository
 import androidx.lifecycle.ViewModel

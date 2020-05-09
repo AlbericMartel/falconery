@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="am.falconry.quotelist.QuotesViewModel" />
+            type="am.falconry.quote.list.QuotesViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -46,7 +46,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/topAppBarLayout"
-                tools:context=".quotelist.QuotesFragment"
+                tools:context=".quote.list.QuotesFragment"
                 tools:listitem="@layout/quote" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

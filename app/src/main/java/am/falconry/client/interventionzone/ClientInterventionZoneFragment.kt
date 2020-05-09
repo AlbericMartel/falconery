@@ -1,4 +1,4 @@
-package am.falconry.clientinterventionzone
+package am.falconry.client.interventionzone
 
 import am.falconry.R
 import am.falconry.database.FalconryDatabase

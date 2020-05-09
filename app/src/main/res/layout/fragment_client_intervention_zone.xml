@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="am.falconry.clientinterventionzone.ClientInterventionZoneViewModel" />
+            type="am.falconry.client.interventionzone.ClientInterventionZoneViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

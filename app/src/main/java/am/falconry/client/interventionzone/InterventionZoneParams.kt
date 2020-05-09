@@ -1,4 +1,4 @@
-package am.falconry.clientinterventionzone
+package am.falconry.client.interventionzone
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

@@ -1,4 +1,4 @@
-package am.falconry.clientinterventionzone
+package am.falconry.client.interventionzone
 
 import am.falconry.database.client.ClientRepository
 import androidx.lifecycle.ViewModel
