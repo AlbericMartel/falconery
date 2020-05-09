@@ -20,12 +20,10 @@ import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.ClientEntity
 import am.falconry.database.client.InterventionZoneEntity
-import am.falconry.database.quote.QuoteDatabaseDao
-import am.falconry.database.quote.QuoteEntity
-import am.falconry.database.quote.QuoteInterventionZoneEntity
-import am.falconry.database.quote.QuoteRepository
+import am.falconry.database.quote.*
 import am.falconry.domain.InterventionZone
 import am.falconry.domain.Quote
+import am.falconry.domain.Quote2
 import am.falconry.domain.QuoteInterventionZone
 import am.falconry.utils.getValue
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -169,6 +167,23 @@ class QuoteRepositoryTest {
         assertThat(savedQuote.onGoing).isFalse()
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun shouldGetAllClientQuotes() {
+        val clientId = clientDao.insertClient(givenClientEntity())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZoneEntity(getClient(clientId), "interventionZone1"))
+        val quoteId = quoteDao.insertQuote(givenQuoteEntity2(interventionZoneId))
+
+        val clientQuotes = getValue(quoteRepository.getAllClientQuotes(clientId))
+
+        assertThat(clientQuotes).isNotNull()
+        assertThat(clientQuotes).hasSize(1)
+        val singleQuote: Quote2 = clientQuotes[0]
+        assertThat(singleQuote.quoteId).isEqualTo(quoteId)
+        assertThat(singleQuote.interventionZoneId).isEqualTo(interventionZoneId)
+        assertThat(singleQuote.onGoing).isTrue()
+    }
+
     private fun getClient(clientId: Long) = getValue(clientDao.getClient(clientId))!!
 
     private fun givenClientEntity(): ClientEntity {
@@ -185,6 +200,14 @@ class QuoteRepositoryTest {
         interventionZone.name = name
 
         return interventionZone
+    }
+
+    private fun givenQuoteEntity2(interventionZoneId: Long): QuoteEntity2 {
+        val quote = QuoteEntity2()
+        quote.interventionZoneId = interventionZoneId
+        quote.onGoing = true
+
+        return quote
     }
 
     private fun givenQuoteEntity(clientId: Long): QuoteEntity {

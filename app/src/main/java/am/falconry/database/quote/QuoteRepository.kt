@@ -38,17 +38,23 @@ class QuoteRepository(database: FalconryDatabase) {
         }
     }
 
+    fun saveQuoteInterventionZones(quote: Quote, quoteInterventionZones: MutableList<QuoteInterventionZone>) {
+        val quoteId = quoteDao.insertQuote(toEntity(quote))
+
+        quoteInterventionZones.forEach {
+            quoteDao.insertQuoteInterventionZone(toEntity(quoteId, it))
+        }
+    }
+
     fun createNewQuote(interventionZoneId: Long): Long {
         val newQuote = Quote2.newQuote(interventionZoneId)
 
         return quoteDao.insertQuote(toEntity(newQuote))
     }
 
-    fun saveQuoteInterventionZones(quote: Quote, quoteInterventionZones: MutableList<QuoteInterventionZone>) {
-        val quoteId = quoteDao.insertQuote(toEntity(quote))
-
-        quoteInterventionZones.forEach {
-            quoteDao.insertQuoteInterventionZone(toEntity(quoteId, it))
+    fun getAllClientQuotes(clientId: Long): LiveData<List<Quote2>> {
+        return Transformations.map(quoteDao.getAllClientQuotes(clientId)) {
+            toDomainModel2(it)
         }
     }
 
@@ -60,6 +66,12 @@ class QuoteRepository(database: FalconryDatabase) {
 
     private fun toDomainModel(quote: QuoteEntity, client: ClientEntity, interventions: List<QuoteInterventionZoneAndInterventionZone>): Quote {
         return Quote(quote.quoteId, quote.onGoing, client.clientId, client.name, toDomainModel(interventions))
+    }
+
+    private fun toDomainModel2(quotes: List<QuoteEntity2>): List<Quote2> {
+        return quotes.map {
+            Quote2(it.quoteId, it.interventionZoneId, it.onGoing)
+        }
     }
 
     private fun toEntity(quote: Quote): QuoteEntity {
