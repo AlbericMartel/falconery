@@ -1,5 +1,7 @@
 package am.falconry.domain
 
+import java.time.LocalDate
+
 data class Quote(
     var quoteId: Long,
     var interventionZoneId: Long,
@@ -12,3 +14,10 @@ data class Quote(
         }
     }
 }
+
+data class QuoteIntervention(
+    var interventionId: Long,
+    var quoteId: Long,
+    var interventionPointId: Long,
+    var date: LocalDate
+)

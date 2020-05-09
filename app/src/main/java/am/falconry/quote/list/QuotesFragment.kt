@@ -4,6 +4,7 @@ import am.falconry.R
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.quote.QuoteRepository
 import am.falconry.databinding.FragmentQuotesBinding
+import am.falconry.quote.interventiondates.InterventionDatesParams
 import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,11 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 
 class QuotesFragment : Fragment() {
 
     private lateinit var viewModel: QuotesViewModel
     private lateinit var binding: FragmentQuotesBinding
+    private lateinit var arguments: QuotesFragmentArgs
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +29,7 @@ class QuotesFragment : Fragment() {
     ): View? {
         val application = requireNotNull(this.activity).application
 
-        val arguments = QuotesFragmentArgs.fromBundle(requireArguments())
+        arguments = QuotesFragmentArgs.fromBundle(requireArguments())
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_quotes, container, false)
         viewModel = setupViewModel(application, arguments.clientId)
 
@@ -57,6 +60,16 @@ class QuotesFragment : Fragment() {
         viewModel.quotes.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.quotes = it
+            }
+        })
+
+        viewModel.navigateToQuoteInterventions.observe(viewLifecycleOwner, Observer { quoteId ->
+            quoteId?.let {
+                this.findNavController().navigate(
+                    QuotesFragmentDirections.actionQuotesFragmentToQuoteInterventionDatesFragment(
+                        InterventionDatesParams(arguments.clientId, it)
+                    )
+                )
             }
         })
     }

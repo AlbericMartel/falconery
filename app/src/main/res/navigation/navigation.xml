@@ -48,10 +48,13 @@
         android:label="QuotesFragment" >
         <argument
             android:name="clientId"
-            android:defaultValue="0L" />
+            app:argType="long" />
         <action
             android:id="@+id/action_quotesFragment_to_clientFragment"
             app:destination="@id/clientFragment" />
+        <action
+            android:id="@+id/action_quotesFragment_to_quoteInterventionDatesFragment"
+            app:destination="@id/quoteInterventionDatesFragment" />
     </fragment>
     <fragment
         android:id="@+id/clientsFragment"
@@ -60,5 +63,16 @@
         <action
             android:id="@+id/action_clientsFragment_to_clientFragment"
             app:destination="@id/clientFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quoteInterventionDatesFragment"
+        android:name="am.falconry.quote.interventiondates.QuoteInterventionDatesFragment"
+        android:label="QuoteInterventionDatesFragment" >
+        <argument
+            android:name="params"
+            app:argType="am.falconry.quote.interventiondates.InterventionDatesParams" />
+        <action
+            android:id="@+id/action_quoteInterventionDatesFragment_to_quotesFragment"
+            app:destination="@id/quotesFragment" />
     </fragment>
 </navigation>

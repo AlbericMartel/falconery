@@ -54,7 +54,7 @@ class ClientFragment : Fragment() {
 
         viewModel.goToQuotesList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                this.findNavController().navigate(ClientFragmentDirections.actionClientFragmentToQuotesFragment().setClientId(arguments.clientId))
+                this.findNavController().navigate(ClientFragmentDirections.actionClientFragmentToQuotesFragment(arguments.clientId))
                 viewModel.doneGoToQuotesList()
             }
         })

@@ -47,7 +47,7 @@ class ClientRepositoryTest {
     @Test
     @Throws(Exception::class)
     fun shouldGetClients() {
-        val client = defaultClient()
+        val client = givenClient()
         val createdClientId = clientDao.insertClient(client)
 
         val createdClient = getValue(repository.getAllClients())
@@ -69,7 +69,7 @@ class ClientRepositoryTest {
     @Test
     @Throws(Exception::class)
     fun shouldLoadExistingClient() {
-        val clientId = clientDao.insertClient(defaultClient())
+        val clientId = clientDao.insertClient(givenClient())
 
         val client = getValue(repository.getClient(clientId))
 
@@ -134,8 +134,8 @@ class ClientRepositoryTest {
     @Throws(Exception::class)
     fun shouldUpdateClientInterventionZone() {
         val clientId = clientDao.insertClient(ClientEntity(0L, "name", "email"))
-        val interventionZoneId = clientDao.insertInterventionZone(defaultInterventionZone(clientId))
-        val intervationPoint = defaultInterventionPoint(interventionZoneId)
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(clientId))
+        val intervationPoint = givenInterventionPoint(interventionZoneId)
         val interventionPointId = clientDao.insertInterventionPoint(intervationPoint)
         val updatedInterventionZone = InterventionZone(interventionZoneId, clientId, "interventionZone.updated")
         val updatedInterventionPoint = InterventionPoint(interventionPointId, interventionZoneId, "interventionPoint.updated")
@@ -160,7 +160,7 @@ class ClientRepositoryTest {
     @Throws(Exception::class)
     fun shouldGetClientInterventionZones() {
         val clientId = clientDao.insertClient(ClientEntity(0L, "name", "email"))
-        val interventionZone = defaultInterventionZone(clientId)
+        val interventionZone = givenInterventionZone(clientId)
         val interventionZoneId = clientDao.insertInterventionZone(interventionZone)
 
         val interventionZones = getValue(repository.getClientInterventionZones(clientId))
@@ -176,9 +176,9 @@ class ClientRepositoryTest {
     @Throws(Exception::class)
     fun shouldGetZoneInterventionPoints() {
         val clientId = clientDao.insertClient(ClientEntity(0L, "name", "email"))
-        val interventionZone = defaultInterventionZone(clientId)
+        val interventionZone = givenInterventionZone(clientId)
         val interventionZoneId = clientDao.insertInterventionZone(interventionZone)
-        val interventionPoint = defaultInterventionPoint(interventionZoneId)
+        val interventionPoint = givenInterventionPoint(interventionZoneId)
         val interventionPointId = clientDao.insertInterventionPoint(interventionPoint)
 
         val interventionPoints = getValue(repository.getZoneInterventionPoints(interventionZoneId))
@@ -190,7 +190,7 @@ class ClientRepositoryTest {
         assertThat(interventionPoints[0].name).isEqualTo("interventionPoint")
     }
 
-    private fun defaultClient(): ClientEntity {
+    private fun givenClient(): ClientEntity {
         val client = ClientEntity()
         client.name = "Name"
         client.email = "email"
@@ -198,7 +198,7 @@ class ClientRepositoryTest {
         return client
     }
 
-    private fun defaultInterventionZone(clientId: Long): InterventionZoneEntity {
+    private fun givenInterventionZone(clientId: Long): InterventionZoneEntity {
         val interventionZone = InterventionZoneEntity()
         interventionZone.clientId = clientId
         interventionZone.name = "interventionZone"
@@ -206,7 +206,7 @@ class ClientRepositoryTest {
         return interventionZone
     }
 
-    private fun defaultInterventionPoint(interventionZoneId: Long): InterventionPointEntity {
+    private fun givenInterventionPoint(interventionZoneId: Long): InterventionPointEntity {
         val interventionPoint = InterventionPointEntity()
         interventionPoint.interventionZoneId = interventionZoneId
         interventionPoint.name = "interventionPoint"

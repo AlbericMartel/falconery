@@ -17,4 +17,6 @@
     <string name="quotes">Devis</string>
     <string name="newQuote">Nouveau devis</string>
     <string name="createdQuotes">Devis créés</string>
+    <string name="interventionDates">Dates d\'intervention</string>
+    <string name="newDate">Nouvelle date</string>
 </resources>

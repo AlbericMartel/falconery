@@ -19,6 +19,7 @@ package am.falconry.quote
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.ClientEntity
+import am.falconry.database.client.InterventionPointEntity
 import am.falconry.database.client.InterventionZoneEntity
 import am.falconry.database.quote.QuoteDatabaseDao
 import am.falconry.database.quote.QuoteEntity
@@ -36,6 +37,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import java.time.LocalDate
+
 
 @RunWith(AndroidJUnit4::class)
 class QuoteRepositoryTest {
@@ -68,24 +71,25 @@ class QuoteRepositoryTest {
     @Test
     @Throws(Exception::class)
     fun shouldCreateNewQuote() {
-        val clientId = clientDao.insertClient(givenClientEntity())
-        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZoneEntity(getClient(clientId), "interventionZone1"))
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone1"))
 
         val quoteId = quoteRepository.createNewQuote(interventionZoneId)
 
-        val savedQuote = getValue(quoteDao.getQuoteById(quoteId))
+        val savedQuote = getValue(quoteDao.getQuote(quoteId))
         assertThat(savedQuote).isNotNull()
-        assertThat(savedQuote.quoteId).isEqualTo(quoteId)
-        assertThat(savedQuote.interventionZoneId).isEqualTo(interventionZoneId)
-        assertThat(savedQuote.onGoing).isFalse()
+        assertThat(savedQuote.quote.quoteId).isEqualTo(quoteId)
+        assertThat(savedQuote.interventionZone.interventionZoneId).isEqualTo(interventionZoneId)
+        assertThat(savedQuote.interventionZone.name).isEqualTo("interventionZone1")
+        assertThat(savedQuote.quote.onGoing).isFalse()
     }
 
     @Test
     @Throws(Exception::class)
     fun shouldGetAllClientQuotes() {
-        val clientId = clientDao.insertClient(givenClientEntity())
-        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZoneEntity(getClient(clientId), "interventionZone1"))
-        val quoteId = quoteDao.insertQuote(givenQuoteEntity2(interventionZoneId))
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone1"))
+        val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
 
         val clientQuotes = getValue(quoteRepository.getAllClientQuotes(clientId))
 
@@ -98,9 +102,84 @@ class QuoteRepositoryTest {
         assertThat(singleQuote.onGoing).isTrue()
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun shouldGetQuote() {
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone1"))
+        val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
+
+        val quote = getValue(quoteRepository.getQuote(quoteId))
+
+        assertThat(quote).isNotNull()
+        assertThat(quote.quoteId).isEqualTo(quoteId)
+        assertThat(quote.interventionZoneId).isEqualTo(interventionZoneId)
+        assertThat(quote.interventionZoneName).isEqualTo("interventionZone1")
+        assertThat(quote.onGoing).isTrue()
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun shouldAddInterventionDate() {
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone"))
+        val interventionPointId1 = clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint1"))
+        val interventionPointId2 = clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint2"))
+        val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
+        val now = LocalDate.now()
+
+        quoteRepository.insertInterventionDate(quoteId, now)
+
+        val interventions = getValue(quoteRepository.getInterventionsForDate(quoteId, now))
+        assertThat(interventions).isNotNull()
+        assertThat(interventions).hasSize(2)
+        assertThat(interventions.map { it.interventionPointId }).containsExactlyElementsIn(listOf(interventionPointId1, interventionPointId2))
+        assertThat(interventions.map { it.date }).contains(now)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun shouldGetAllInterventionDatesForQuote() {
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone"))
+        val interventionPointId = clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint"))
+        val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
+        val now = LocalDate.now()
+        val nowPlus1Day = now.plusDays(1)
+
+        quoteRepository.insertInterventionDate(quoteId, now)
+        quoteRepository.insertInterventionDate(quoteId, nowPlus1Day)
+
+        val interventions = getValue(quoteRepository.getAllInterventionDatesForQuote(quoteId))
+        assertThat(interventions).isNotNull()
+        assertThat(interventions).hasSize(2)
+        assertThat(interventions).containsExactly(now, nowPlus1Day)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun shouldGetAllQuoteInterventions() {
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone"))
+        val interventionPointId = clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint"))
+        val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
+        val now = LocalDate.now()
+        val nowPlus1Day = now.plusDays(1)
+
+        quoteRepository.insertInterventionDate(quoteId, now)
+        quoteRepository.insertInterventionDate(quoteId, nowPlus1Day)
+
+        val interventions = getValue(quoteRepository.getAllInterventionsForQuote(quoteId))
+        assertThat(interventions).isNotNull()
+        assertThat(interventions).hasSize(2)
+        assertThat(interventions.keys).containsExactly(now, nowPlus1Day)
+        assertThat(interventions[now]!!.map { it.interventionPointId }).containsExactly(interventionPointId)
+        assertThat(interventions[nowPlus1Day]!!.map { it.interventionPointId }).containsExactly(interventionPointId)
+    }
+
     private fun getClient(clientId: Long) = getValue(clientDao.getClient(clientId))!!
 
-    private fun givenClientEntity(): ClientEntity {
+    private fun givenClient(): ClientEntity {
         val client = ClientEntity()
         client.name = "Name"
         client.email = "email"
@@ -108,7 +187,7 @@ class QuoteRepositoryTest {
         return client
     }
 
-    private fun givenInterventionZoneEntity(client: ClientEntity, name: String): InterventionZoneEntity {
+    private fun givenInterventionZone(client: ClientEntity, name: String): InterventionZoneEntity {
         val interventionZone = InterventionZoneEntity()
         interventionZone.clientId = client.clientId
         interventionZone.name = name
@@ -116,7 +195,15 @@ class QuoteRepositoryTest {
         return interventionZone
     }
 
-    private fun givenQuoteEntity2(interventionZoneId: Long): QuoteEntity {
+    private fun givenInterventionPoint(interventionZoneId: Long, name: String): InterventionPointEntity {
+        val interventionPoint = InterventionPointEntity()
+        interventionPoint.interventionZoneId = interventionZoneId
+        interventionPoint.name = name
+
+        return interventionPoint
+    }
+
+    private fun givenQuote(interventionZoneId: Long): QuoteEntity {
         val quote = QuoteEntity()
         quote.interventionZoneId = interventionZoneId
         quote.onGoing = true

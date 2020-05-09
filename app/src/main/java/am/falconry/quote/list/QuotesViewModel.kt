@@ -22,8 +22,8 @@ class QuotesViewModel(
     val navigateToQuoteInterventions: LiveData<Long>
         get() = _navigateToQuoteInterventions
 
-    fun onQuoteClicked(quoteInterventionZoneId: Long) {
-        _navigateToQuoteInterventions.value = quoteInterventionZoneId
+    fun onQuoteClicked(quoteId: Long) {
+        _navigateToQuoteInterventions.value = quoteId
     }
 
     fun onQuoteInterventionsNavigated() {
