@@ -130,6 +130,17 @@
                 app:layout_constraintBottom_toTopOf="@+id/interventionZonesList"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <Button
+                android:id="@+id/quotesListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{() -> viewModel.goToQuotes()}"
+                android:text="@string/createdQuotes"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

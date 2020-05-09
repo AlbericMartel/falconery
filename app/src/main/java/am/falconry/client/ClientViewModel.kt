@@ -30,6 +30,10 @@ class ClientViewModel(
     val goToInterventionZone: LiveData<InterventionZoneParams>
         get() = _goToInterventionZone
 
+    private val _goToQuotesList = MutableLiveData<Long>()
+    val goToQuotesList: LiveData<Long>
+        get() = _goToQuotesList
+
     fun newClientInterventionZone() {
         trySaveClientAndNavigateToInterventionZone()
     }
@@ -76,6 +80,14 @@ class ClientViewModel(
                 _goToInterventionZone.value = InterventionZoneParams(clientId, 0L)
             }
         }
+    }
+
+    fun goToQuotes() {
+        _goToQuotesList.value = clientId
+    }
+
+    fun doneGoToQuotesList() {
+        _goToQuotesList.value = null
     }
 
     fun goToInterventionZone(interventionZoneId: Long) {

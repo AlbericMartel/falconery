@@ -1,6 +1,5 @@
 package am.falconry.quotelist
 
-import am.falconry.HomeViewPagerFragmentDirections
 import am.falconry.R
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.quote.QuoteRepository
@@ -14,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 
 class QuotesFragment : Fragment() {
 
@@ -27,34 +26,30 @@ class QuotesFragment : Fragment() {
     ): View? {
         val application = requireNotNull(this.activity).application
 
+        val arguments = QuotesFragmentArgs.fromBundle(requireArguments())
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_quotes, container, false)
-        viewModel = setupViewModel(application)
+        viewModel = setupViewModel(application, arguments.clientId)
+
+        binding.topAppBar.setNavigationOnClickListener { view ->
+            view.findNavController().navigate(QuotesFragmentDirections.actionQuotesFragmentToClientFragment().setClientId(arguments.clientId))
+        }
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         setupQuotesList(binding)
 
-        viewModel.navigateToQuoteInterventionZoneConf.observe(viewLifecycleOwner, Observer { quoteId ->
-            quoteId?.let {
-                this.findNavController().navigate(
-                    HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToQuoteFragment()
-                )
-                viewModel.onQuoteInterventionZoneConfNavigated()
-            }
-        })
-
         return binding.root
     }
 
-    private fun setupViewModel(application: Application): QuotesViewModel {
+    private fun setupViewModel(application: Application, clientId: Long): QuotesViewModel {
         val dataSource = FalconryDatabase.getInstance(application)
-        val viewModelFactory = QuotesViewModelFactory(QuoteRepository(dataSource), application)
+        val viewModelFactory = QuotesViewModelFactory(QuoteRepository(dataSource), clientId)
         return ViewModelProviders.of(this, viewModelFactory).get(QuotesViewModel::class.java)
     }
 
     private fun setupQuotesList(binding: FragmentQuotesBinding) {
-        val adapter = QuotesAdapter(QuoteClickListener { quoteId ->
+        val adapter = QuoteAdapter(QuoteClickListener { quoteId ->
             viewModel.onQuoteClicked(quoteId)
         })
         binding.quoteList.adapter = adapter

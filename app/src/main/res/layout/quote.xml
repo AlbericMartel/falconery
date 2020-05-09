@@ -5,7 +5,7 @@
     <data>
         <variable
             name="quote"
-            type="am.falconry.domain.Quote" />
+            type="am.falconry.domain.Quote2" />
     </data>
 
     <LinearLayout
@@ -36,7 +36,7 @@
                         android:id="@+id/clientName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{quote.clientName}"
+                        android:text="TEMPORARY_NAME"
                         tools:text="Client1"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         />

@@ -16,4 +16,5 @@
     <string name="dates">Dates</string>
     <string name="quotes">Devis</string>
     <string name="newQuote">Nouveau devis</string>
+    <string name="createdQuotes">Devis créés</string>
 </resources>

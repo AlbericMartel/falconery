@@ -52,6 +52,13 @@ class ClientFragment : Fragment() {
             }
         })
 
+        viewModel.goToQuotesList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                this.findNavController().navigate(ClientFragmentDirections.actionClientFragmentToQuotesFragment().setClientId(arguments.clientId))
+                viewModel.doneGoToQuotesList()
+            }
+        })
+
         return binding.root
     }
 
