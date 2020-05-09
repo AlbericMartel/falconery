@@ -21,9 +21,9 @@ import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.ClientEntity
 import am.falconry.database.client.InterventionZoneEntity
 import am.falconry.database.quote.QuoteDatabaseDao
-import am.falconry.database.quote.QuoteEntity2
+import am.falconry.database.quote.QuoteEntity
 import am.falconry.database.quote.QuoteRepository
-import am.falconry.domain.Quote2
+import am.falconry.domain.Quote
 import am.falconry.utils.getValue
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -91,7 +91,7 @@ class QuoteRepositoryTest {
 
         assertThat(clientQuotes).isNotNull()
         assertThat(clientQuotes).hasSize(1)
-        val singleQuote: Quote2 = clientQuotes[0]
+        val singleQuote: Quote = clientQuotes[0]
         assertThat(singleQuote.quoteId).isEqualTo(quoteId)
         assertThat(singleQuote.interventionZoneId).isEqualTo(interventionZoneId)
         assertThat(singleQuote.interventionZoneName).isEqualTo("interventionZone1")
@@ -116,8 +116,8 @@ class QuoteRepositoryTest {
         return interventionZone
     }
 
-    private fun givenQuoteEntity2(interventionZoneId: Long): QuoteEntity2 {
-        val quote = QuoteEntity2()
+    private fun givenQuoteEntity2(interventionZoneId: Long): QuoteEntity {
+        val quote = QuoteEntity()
         quote.interventionZoneId = interventionZoneId
         quote.onGoing = true
 

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="quote"
-            type="am.falconry.domain.Quote2" />
+            type="am.falconry.domain.Quote" />
     </data>
 
     <LinearLayout

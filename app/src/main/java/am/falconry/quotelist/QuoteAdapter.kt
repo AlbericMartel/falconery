@@ -2,7 +2,7 @@ package am.falconry.quotelist
 
 
 import am.falconry.databinding.QuoteBinding
-import am.falconry.domain.Quote2
+import am.falconry.domain.Quote
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +11,7 @@ class QuoteAdapter(
     private val clickListener: QuoteClickListener
 ) : RecyclerView.Adapter<QuoteAdapter.ViewHolder>() {
 
-    var quotes = listOf<Quote2>()
+    var quotes = listOf<Quote>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -30,7 +30,7 @@ class QuoteAdapter(
 
     class ViewHolder private constructor(val binding: QuoteBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Quote2, clickListener: QuoteClickListener) {
+        fun bind(item: Quote, clickListener: QuoteClickListener) {
             binding.quote = item
             binding.card.setOnClickListener { clickListener.onClick(item) }
             binding.executePendingBindings()
@@ -47,5 +47,5 @@ class QuoteAdapter(
 }
 
 class QuoteClickListener(val clickListener: (quoteId: Long) -> Unit) {
-    fun onClick(quote: Quote2) = clickListener(quote.quoteId)
+    fun onClick(quote: Quote) = clickListener(quote.quoteId)
 }

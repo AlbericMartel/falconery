@@ -8,7 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "quote2",
+    tableName = "quote",
     foreignKeys = [
         ForeignKey(
             entity = InterventionZoneEntity::class,
@@ -21,7 +21,7 @@ import androidx.room.PrimaryKey
         Index("interventionZoneId")
     ]
 )
-data class QuoteEntity2(
+data class QuoteEntity(
     @PrimaryKey(autoGenerate = true)
     var quoteId: Long = 0L,
 

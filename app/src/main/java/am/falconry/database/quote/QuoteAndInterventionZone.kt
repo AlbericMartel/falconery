@@ -5,7 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class QuoteAndInterventionZone(
-    @Embedded val quote: QuoteEntity2,
+    @Embedded val quote: QuoteEntity,
 
     @Relation(parentColumn = "interventionZoneId", entityColumn = "interventionZoneId")
     val interventionZone: InterventionZoneEntity
