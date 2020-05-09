@@ -2,6 +2,7 @@ package am.falconry.client
 
 import am.falconry.clientinterventionzone.InterventionZoneParams
 import am.falconry.database.client.ClientRepository
+import am.falconry.database.quote.QuoteRepository
 import am.falconry.domain.InterventionZone
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -11,14 +12,15 @@ import kotlinx.coroutines.*
 
 class ClientViewModel(
     private val clientId: Long = 0L,
-    private val repository: ClientRepository
+    private val clientRepository: ClientRepository,
+    private val quoteRepository: QuoteRepository
 ) : ViewModel() {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var client = repository.getClient(clientId)
-    var loadedInterventionZones: LiveData<List<InterventionZone>> = repository.getClientInterventionZones(clientId)
+    var client = clientRepository.getClient(clientId)
+    var loadedInterventionZones: LiveData<List<InterventionZone>> = clientRepository.getClientInterventionZones(clientId)
 
     private val _goToClientList = MutableLiveData<Boolean>()
     val goToClientList: LiveData<Boolean>
@@ -43,8 +45,12 @@ class ClientViewModel(
         }
     }
 
+    fun createNewQuote(interventionZoneId: Long) {
+
+    }
+
     private fun saveClient(): Long {
-        return repository.saveClient(client.value!!)
+        return clientRepository.saveClient(client.value!!)
     }
 
     private fun isClientValid(): Boolean {

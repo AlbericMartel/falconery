@@ -9,23 +9,25 @@
             type="am.falconry.domain.InterventionZone" />
     </data>
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:clickable="true">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:clickable="true">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <TextView
                     android:id="@+id/interventionZoneName"
@@ -36,6 +38,18 @@
                     tools:text="Etats Unis" />
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    style="?attr/borderlessButtonStyle"
+                    android:id="@+id/newQuote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/newQuote" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

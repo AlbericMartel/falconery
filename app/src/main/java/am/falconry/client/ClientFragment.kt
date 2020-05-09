@@ -3,6 +3,7 @@ package am.falconry.client
 import am.falconry.R
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientRepository
+import am.falconry.database.quote.QuoteRepository
 import am.falconry.databinding.FragmentClientBinding
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,8 +30,9 @@ class ClientFragment : Fragment() {
         val arguments = ClientFragmentArgs.fromBundle(requireArguments())
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_client, container, false)
-        val repository = ClientRepository(FalconryDatabase.getInstance(application))
-        val viewModelFactory = ClientViewModelFactory(arguments.clientId, repository)
+        val clientRepository = ClientRepository(FalconryDatabase.getInstance(application))
+        val quoteRepository = QuoteRepository(FalconryDatabase.getInstance(application))
+        val viewModelFactory = ClientViewModelFactory(arguments.clientId, clientRepository, quoteRepository)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ClientViewModel::class.java)
 
         binding.topAppBar.setNavigationOnClickListener { view ->
@@ -54,9 +56,13 @@ class ClientFragment : Fragment() {
     }
 
     private fun setupInterventionZonesList() {
-        val adapter = ClientInterventionZonesAdapter(InterventionZoneClickListener { interventionZoneId ->
-            viewModel.goToInterventionZone(interventionZoneId)
-        })
+        val adapter = ClientInterventionZonesAdapter(
+            InterventionZoneClickListener { interventionZoneId ->
+                viewModel.goToInterventionZone(interventionZoneId)
+            },
+            InterventionZoneClickListener { interventionZoneId ->
+                viewModel.createNewQuote(interventionZoneId)
+            })
         binding.interventionZonesList.adapter = adapter
 
         viewModel.loadedInterventionZones.observe(viewLifecycleOwner, Observer {

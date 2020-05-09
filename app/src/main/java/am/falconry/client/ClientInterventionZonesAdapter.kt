@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class ClientInterventionZonesAdapter(
-    private val clickListener: InterventionZoneClickListener
+    private val cardClickListener: InterventionZoneClickListener,
+    private val newQuoteClickListener: InterventionZoneClickListener
 ): RecyclerView.Adapter<ClientInterventionZonesAdapter.ViewHolder>() {
 
     var data =  listOf<InterventionZone>()
@@ -20,7 +21,7 @@ class ClientInterventionZonesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item, clickListener)
+        holder.bind(item, cardClickListener, newQuoteClickListener)
     }
 
 
@@ -30,9 +31,10 @@ class ClientInterventionZonesAdapter(
 
     class ViewHolder private constructor(val binding: InterventionZoneBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: InterventionZone, clickListener: InterventionZoneClickListener) {
+        fun bind(item: InterventionZone, cardClickListener: InterventionZoneClickListener, newQuoteClickListener: InterventionZoneClickListener) {
             binding.interventionZone = item
-            binding.card.setOnClickListener { clickListener.onClick(item) }
+            binding.card.setOnClickListener { cardClickListener.onClick(item) }
+            binding.newQuote.setOnClickListener { newQuoteClickListener.onClick(item) }
             binding.executePendingBindings()
         }
 

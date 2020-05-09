@@ -14,4 +14,6 @@
     <string name="quotesScreen">Devis</string>
     <string name="quote">Devis</string>
     <string name="dates">Dates</string>
+    <string name="quotes">Devis</string>
+    <string name="newQuote">Nouveau devis</string>
 </resources>
