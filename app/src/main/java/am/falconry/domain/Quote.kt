@@ -17,11 +17,12 @@ data class Quote(
 data class Quote2(
     var quoteId: Long,
     var interventionZoneId: Long,
+    var interventionZoneName: String,
     var onGoing: Boolean
 ) {
     companion object {
         fun newQuote(interventionZoneId: Long): Quote2 {
-            return Quote2(0L, interventionZoneId, false)
+            return Quote2(0L, interventionZoneId, "", false)
         }
     }
 }

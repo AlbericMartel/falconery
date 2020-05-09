@@ -68,9 +68,9 @@ class QuoteRepository(database: FalconryDatabase) {
         return Quote(quote.quoteId, quote.onGoing, client.clientId, client.name, toDomainModel(interventions))
     }
 
-    private fun toDomainModel2(quotes: List<QuoteEntity2>): List<Quote2> {
+    private fun toDomainModel2(quotes: List<QuoteAndInterventionZone>): List<Quote2> {
         return quotes.map {
-            Quote2(it.quoteId, it.interventionZoneId, it.onGoing)
+            Quote2(it.quote.quoteId, it.quote.interventionZoneId, it.interventionZone.name, it.quote.onGoing)
         }
     }
 

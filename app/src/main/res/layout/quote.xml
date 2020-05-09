@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
@@ -36,7 +36,7 @@
                         android:id="@+id/clientName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TEMPORARY_NAME"
+                        android:text="@{quote.interventionZoneName}"
                         tools:text="Client1"
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         />

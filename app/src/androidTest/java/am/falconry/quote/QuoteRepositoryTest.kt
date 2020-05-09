@@ -181,6 +181,7 @@ class QuoteRepositoryTest {
         val singleQuote: Quote2 = clientQuotes[0]
         assertThat(singleQuote.quoteId).isEqualTo(quoteId)
         assertThat(singleQuote.interventionZoneId).isEqualTo(interventionZoneId)
+        assertThat(singleQuote.interventionZoneName).isEqualTo("interventionZone1")
         assertThat(singleQuote.onGoing).isTrue()
     }
 

@@ -39,6 +39,7 @@ interface QuoteDatabaseDao {
     @Query("SELECT * FROM quote2 WHERE quoteId = :quoteId")
     fun getQuoteById(quoteId: Long): LiveData<QuoteEntity2>
 
-    @Query("SELECT q2.* FROM quote2 q2 JOIN intervention_zone zone ON q2.interventionZoneId = zone.interventionZoneId WHERE zone.clientId = :clientId")
-    fun getAllClientQuotes(clientId: Long): LiveData<List<QuoteEntity2>>
+    @Transaction
+    @Query("SELECT * FROM quote2 q2 JOIN intervention_zone zone ON q2.interventionZoneId = zone.interventionZoneId WHERE zone.clientId = :clientId")
+    fun getAllClientQuotes(clientId: Long): LiveData<List<QuoteAndInterventionZone>>
 }
