@@ -1,37 +1,13 @@
 package am.falconry.database.quote
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Transaction
 
 @Dao
 interface QuoteDatabaseDao {
-
-    @Insert
-    fun insertQuote(quote: QuoteEntity): Long
-
-    @Update
-    fun updateQuote(quote: QuoteEntity)
-
-    @Transaction
-    @Query("SELECT * FROM quote WHERE quoteId = :quoteId")
-    fun getQuote(quoteId: Long): LiveData<QuoteAndClientAndQuoteInterventionZones?>
-
-    @Transaction
-    @Query("SELECT * FROM quote where clientId = :clientId")
-    fun getAllQuotesForClient(clientId: Long): LiveData<List<QuoteAndClientAndQuoteInterventionZones>>
-
-    @Transaction
-    @Query("SELECT * FROM quote")
-    fun getAllQuotes(): LiveData<List<QuoteAndClientAndQuoteInterventionZones>>
-
-    @Insert
-    fun insertQuoteInterventionZone(intervention: QuoteInterventionZoneEntity): Long
-
-    @Update
-    fun updateQuoteInterventionZone(intervention: QuoteInterventionZoneEntity)
-
-    @Query("SELECT * FROM quote_intervention_zone WHERE quoteId = :quoteId")
-    fun getQuoteInterventionZones(quoteId: Long): LiveData<List<QuoteInterventionZoneEntity>>
 
     @Insert
     fun insertQuote(quote: QuoteEntity2): Long

@@ -1,19 +1,5 @@
 package am.falconry.domain
 
-data class Quote(
-    var quoteId: Long,
-    var onGoing: Boolean,
-    var clientId: Long,
-    var clientName: String,
-    var quoteInterventionZones: List<QuoteInterventionZone>
-) {
-    companion object {
-        fun newQuote(): Quote {
-            return Quote(0L, false, 0L, "", mutableListOf())
-        }
-    }
-}
-
 data class Quote2(
     var quoteId: Long,
     var interventionZoneId: Long,

@@ -20,11 +20,10 @@ import am.falconry.database.FalconryDatabase
 import am.falconry.database.client.ClientDatabaseDao
 import am.falconry.database.client.ClientEntity
 import am.falconry.database.client.InterventionZoneEntity
-import am.falconry.database.quote.*
-import am.falconry.domain.InterventionZone
-import am.falconry.domain.Quote
+import am.falconry.database.quote.QuoteDatabaseDao
+import am.falconry.database.quote.QuoteEntity2
+import am.falconry.database.quote.QuoteRepository
 import am.falconry.domain.Quote2
-import am.falconry.domain.QuoteInterventionZone
 import am.falconry.utils.getValue
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
@@ -64,92 +63,6 @@ class QuoteRepositoryTest {
     @Throws(IOException::class)
     fun closeDb() {
         db.close()
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun shouldGetNewQuoteWhenNotExistingQuoteId() {
-        val quote = getValue(quoteRepository.getQuote(123))
-
-        assertThat(quote).isNotNull()
-        assertThat(quote.quoteId).isEqualTo(0L)
-        assertThat(quote.onGoing).isFalse()
-        assertThat(quote.clientName).isEqualTo("")
-        val quoteInterventionZones = quote.quoteInterventionZones
-        assertThat(quoteInterventionZones).isEmpty()
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun shouldGet2QuoteInterventions() {
-        val clientId = clientDao.insertClient(givenClientEntity())
-        val interventionZone1 = givenInterventionZoneEntity(getClient(clientId), "interventionZone1")
-        val interventionZone1Id = clientDao.insertInterventionZone(interventionZone1)
-        val interventionZone2 = givenInterventionZoneEntity(getClient(clientId), "interventionZone2")
-        val interventionZone2Id = clientDao.insertInterventionZone(interventionZone2)
-        val quoteId = quoteDao.insertQuote(givenQuoteEntity(clientId))
-        val quoteInterventionZone1Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone1Id))
-        val quoteInterventionZone2Id = quoteDao.insertQuoteInterventionZone(givenQuoteInterventionZoneEntity(quoteId, interventionZone2Id))
-
-        val quotes = getValue(quoteRepository.getAllQuotes())
-
-        assertThat(quotes).isNotNull()
-        assertThat(quotes).hasSize(1)
-        assertThat(quotes[0].quoteId).isEqualTo(quoteId)
-        assertThat(quotes[0].onGoing).isTrue()
-        assertThat(quotes[0].clientName).isEqualTo("Name")
-        val quoteInterventionZones = quotes[0].quoteInterventionZones
-        assertThat(quoteInterventionZones).hasSize(2)
-        assertThat(quoteInterventionZones[0].quoteInterventionZoneId).isEqualTo(quoteInterventionZone1Id)
-        assertThat(quoteInterventionZones[0].interventionZoneId).isEqualTo(interventionZone1Id)
-        assertThat(quoteInterventionZones[0].interventionZoneName).isEqualTo("interventionZone1")
-        assertThat(quoteInterventionZones[1].quoteInterventionZoneId).isEqualTo(quoteInterventionZone2Id)
-        assertThat(quoteInterventionZones[1].interventionZoneId).isEqualTo(interventionZone2Id)
-        assertThat(quoteInterventionZones[1].interventionZoneName).isEqualTo("interventionZone2")
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun shouldSaveQuoteWithoutQuoteInterventionZones() {
-        val clientId = clientDao.insertClient(givenClientEntity())
-
-        val quote = Quote.newQuote()
-        quote.clientId = clientId
-        quote.onGoing = true
-
-        quoteRepository.saveQuoteInterventionZones(quote, mutableListOf())
-
-        val allQuotes = getValue(quoteRepository.getAllQuotes())
-        assertThat(allQuotes).isNotEmpty()
-        assertThat(allQuotes[0].clientName).isEqualTo("Name")
-        assertThat(allQuotes[0].onGoing).isTrue()
-        assertThat(allQuotes[0].quoteInterventionZones).isEmpty()
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun shouldSaveQuoteWithQuoteInterventionZone() {
-        val clientId = clientDao.insertClient(givenClientEntity())
-        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZoneEntity(getClient(clientId), "interventionZone1"))
-
-        val quote = Quote.newQuote()
-        quote.clientId = clientId
-        quote.onGoing = true
-
-        val interventionZone = InterventionZone.newInterventionZone()
-        interventionZone.interventionZoneId = interventionZoneId
-        val quoteInterventionZone = QuoteInterventionZone.from(interventionZone)
-
-        quoteRepository.saveQuoteInterventionZones(quote, mutableListOf(quoteInterventionZone))
-
-        val allQuotes = getValue(quoteRepository.getAllQuotes())
-        assertThat(allQuotes).isNotEmpty()
-        val savedQuote = allQuotes[0]
-        assertThat(savedQuote.clientName).isEqualTo("Name")
-        assertThat(savedQuote.onGoing).isTrue()
-        assertThat(savedQuote.quoteInterventionZones).hasSize(1)
-        val savedQuoteInterventionZone = savedQuote.quoteInterventionZones[0]
-        assertThat(savedQuoteInterventionZone.interventionZoneName).isEqualTo("interventionZone1")
     }
 
     @Test
@@ -209,22 +122,6 @@ class QuoteRepositoryTest {
         quote.onGoing = true
 
         return quote
-    }
-
-    private fun givenQuoteEntity(clientId: Long): QuoteEntity {
-        val quote = QuoteEntity()
-        quote.clientId = clientId
-        quote.onGoing = true
-
-        return quote
-    }
-
-    private fun givenQuoteInterventionZoneEntity(quoteId: Long, interventionZoneId: Long): QuoteInterventionZoneEntity {
-        val quoteInterventionZone = QuoteInterventionZoneEntity()
-        quoteInterventionZone.quoteId = quoteId
-        quoteInterventionZone.interventionZoneId = interventionZoneId
-
-        return quoteInterventionZone
     }
 }
 
