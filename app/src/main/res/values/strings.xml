@@ -19,4 +19,6 @@
     <string name="createdQuotes">Devis créés</string>
     <string name="interventionDates">Dates d\'intervention</string>
     <string name="newDate">Nouvelle date</string>
+    <string name="nbCaptures">Nb captures</string>
+    <string name="comment">Commentaire</string>
 </resources>

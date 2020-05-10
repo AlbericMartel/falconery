@@ -19,5 +19,9 @@ data class QuoteIntervention(
     var interventionId: Long,
     var quoteId: Long,
     var interventionPointId: Long,
-    var date: LocalDate
+    var interventionPointName: String,
+    var date: LocalDate,
+    var nbCaptures: String,
+    var comment: String
+
 )

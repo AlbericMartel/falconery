@@ -2,15 +2,13 @@ package am.falconry.quote.interventions
 
 import am.falconry.database.quote.QuoteRepository
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import java.time.LocalDate
 
 class QuoteInterventionsViewModel(
     quoteId: Long,
     date: LocalDate,
-    quoteRepository: QuoteRepository
+    private val quoteRepository: QuoteRepository
 ) : ViewModel() {
 
     private var viewModelJob = Job()
@@ -21,5 +19,16 @@ class QuoteInterventionsViewModel(
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    fun updateInterventions() {
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                val interventionsToUpdate = interventions.value
+                if (interventionsToUpdate != null) {
+                    quoteRepository.updateInterventions(interventionsToUpdate)
+                }
+            }
+        }
     }
 }

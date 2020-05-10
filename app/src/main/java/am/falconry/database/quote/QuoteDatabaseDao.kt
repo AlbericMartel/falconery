@@ -1,10 +1,7 @@
 package am.falconry.database.quote
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import java.time.LocalDate
 
 @Dao
@@ -21,8 +18,8 @@ interface QuoteDatabaseDao {
     fun getAllClientQuotes(clientId: Long): LiveData<List<QuoteAndInterventionZone>>
 
     @Query(
-        "INSERT INTO quote_intervention (interventionPointId, quoteId, date) " +
-                "SELECT ip.interventionPointId, :quoteId, :date " +
+        "INSERT INTO quote_intervention (interventionPointId, quoteId, date, nbCaptures, comment) " +
+                "SELECT ip.interventionPointId, :quoteId, :date, 0, '' " +
                 "FROM quote q " +
                 "JOIN intervention_zone iz ON q.interventionZoneId = iz.interventionZoneId " +
                 "JOIN intervention_point ip ON iz.interventionZoneId = ip.interventionZoneId " +
@@ -30,12 +27,17 @@ interface QuoteDatabaseDao {
     )
     fun insertInterventionDate(quoteId: Long, date: LocalDate)
 
+    @Transaction
     @Query("SELECT * FROM quote_intervention WHERE quoteId = :quoteId AND  date = :date")
-    fun getInterventionsForDate(quoteId: Long, date: LocalDate): LiveData<List<QuoteInterventionEntity>>
-
-    @Query("SELECT * FROM quote_intervention WHERE quoteId = :quoteId ORDER BY date")
-    fun getAllInterventionsForQuote(quoteId: Long): LiveData<List<QuoteInterventionEntity>>
+    fun getInterventionsForDate(quoteId: Long, date: LocalDate): LiveData<List<QuoteIntervention>>
 
     @Query("SELECT DISTINCT date FROM quote_intervention WHERE quoteId = :quoteId ORDER BY date")
     fun getAllInterventionDatesForQuote(quoteId: Long): LiveData<List<LocalDate>>
+
+    @Update
+    fun updateInterventions(interventions: List<QuoteInterventionEntity>)
+
+    @Transaction
+    @Query("SELECT * FROM quote_intervention WHERE quoteId = :quoteId ORDER BY date")
+    fun getAllInterventionsForQuote(quoteId: Long): LiveData<List<QuoteIntervention>>
 }

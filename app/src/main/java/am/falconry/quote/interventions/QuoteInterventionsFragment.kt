@@ -33,6 +33,7 @@ class QuoteInterventionsFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(QuoteInterventionsViewModel::class.java)
 
         binding.topAppBar.setNavigationOnClickListener { view ->
+            viewModel.updateInterventions()
             view.findNavController().navigateUp()
         }
 

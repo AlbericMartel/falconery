@@ -36,5 +36,9 @@ data class QuoteInterventionEntity(
 
     var interventionPointId: Long = 0L,
 
-    var date: LocalDate = LocalDate.now()
+    var date: LocalDate = LocalDate.now(),
+
+    var nbCaptures: Int = 0,
+
+    var comment: String = ""
 )

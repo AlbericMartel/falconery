@@ -134,7 +134,53 @@ class QuoteRepositoryTest {
         assertThat(interventions).isNotNull()
         assertThat(interventions).hasSize(2)
         assertThat(interventions.map { it.interventionPointId }).containsExactlyElementsIn(listOf(interventionPointId1, interventionPointId2))
+        assertThat(interventions.map { it.interventionPointName }).containsExactlyElementsIn(listOf("interventionPoint1", "interventionPoint2"))
         assertThat(interventions.map { it.date }).contains(now)
+        assertThat(interventions.map { it.nbCaptures }).contains("0")
+        assertThat(interventions.map { it.comment }).contains("")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun shouldUpdateIntervention() {
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone"))
+        val interventionPointId = clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint"))
+        val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
+        val now = LocalDate.now()
+        quoteRepository.insertInterventionDate(quoteId, now)
+        val intervention = getValue(quoteRepository.getInterventionsForDate(quoteId, now))[0]
+        intervention.nbCaptures = "10"
+        intervention.comment = "Finished with eagles"
+
+        quoteRepository.updateInterventions(listOf(intervention))
+
+        val interventionUpdated = getValue(quoteRepository.getInterventionsForDate(quoteId, now))[0]
+        assertThat(interventionUpdated).isNotNull()
+        assertThat(interventionUpdated.interventionId).isEqualTo(intervention.interventionId)
+        assertThat(interventionUpdated.interventionPointId).isEqualTo(interventionPointId)
+        assertThat(interventionUpdated.quoteId).isEqualTo(quoteId)
+        assertThat(interventionUpdated.date).isEqualTo(now)
+        assertThat(interventionUpdated.nbCaptures).isEqualTo("10")
+        assertThat(interventionUpdated.comment).isEqualTo("Finished with eagles")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun shouldUpdateInterventionWithEmptyNbCaptures() {
+        val clientId = clientDao.insertClient(givenClient())
+        val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone"))
+        clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint"))
+        val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
+        val now = LocalDate.now()
+        quoteRepository.insertInterventionDate(quoteId, now)
+        val intervention = getValue(quoteRepository.getInterventionsForDate(quoteId, now))[0]
+        intervention.nbCaptures = ""
+
+        quoteRepository.updateInterventions(listOf(intervention))
+
+        val interventionUpdated = getValue(quoteRepository.getInterventionsForDate(quoteId, now))[0]
+        assertThat(interventionUpdated.nbCaptures).isEqualTo("0")
     }
 
     @Test
@@ -142,7 +188,7 @@ class QuoteRepositoryTest {
     fun shouldGetAllInterventionDatesForQuote() {
         val clientId = clientDao.insertClient(givenClient())
         val interventionZoneId = clientDao.insertInterventionZone(givenInterventionZone(getClient(clientId), "interventionZone"))
-        val interventionPointId = clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint"))
+        clientDao.insertInterventionPoint(givenInterventionPoint(interventionZoneId, "interventionPoint"))
         val quoteId = quoteDao.insertQuote(givenQuote(interventionZoneId))
         val now = LocalDate.now()
         val nowPlus1Day = now.plusDays(1)
@@ -174,7 +220,9 @@ class QuoteRepositoryTest {
         assertThat(interventions).hasSize(2)
         assertThat(interventions.keys).containsExactly(now, nowPlus1Day)
         assertThat(interventions[now]!!.map { it.interventionPointId }).containsExactly(interventionPointId)
+        assertThat(interventions[now]!!.map { it.interventionPointName }).containsExactly("interventionPoint")
         assertThat(interventions[nowPlus1Day]!!.map { it.interventionPointId }).containsExactly(interventionPointId)
+        assertThat(interventions[nowPlus1Day]!!.map { it.interventionPointName }).containsExactly("interventionPoint")
     }
 
     private fun getClient(clientId: Long) = getValue(clientDao.getClient(clientId))!!
