@@ -4,6 +4,7 @@ import am.falconry.R
 import am.falconry.database.FalconryDatabase
 import am.falconry.database.quote.QuoteRepository
 import am.falconry.databinding.FragmentQuoteInterventionDatesBinding
+import am.falconry.quote.interventions.QuoteInterventionsParams
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,12 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import java.time.LocalDate
 
 class QuoteInterventionDatesFragment : Fragment() {
 
     private lateinit var viewModel: QuoteInterventionDatesViewModel
     private lateinit var binding: FragmentQuoteInterventionDatesBinding
+    private lateinit var arguments: QuoteInterventionDatesFragmentArgs
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,8 +30,7 @@ class QuoteInterventionDatesFragment : Fragment() {
     ): View? {
         val application = requireNotNull(this.activity).application
 
-        val arguments = QuoteInterventionDatesFragmentArgs.fromBundle(requireArguments())
-
+        arguments = QuoteInterventionDatesFragmentArgs.fromBundle(requireArguments())
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_quote_intervention_dates, container, false)
         val quoteRepository = QuoteRepository(FalconryDatabase.getInstance(application))
         val viewModelFactory = QuoteInterventionDatesViewModelFactory(arguments.params.quoteId, quoteRepository)
@@ -88,12 +90,18 @@ class QuoteInterventionDatesFragment : Fragment() {
             }
         })
 
-//        viewModel.interventionDateToFill.observe(viewLifecycleOwner, Observer { date ->
-//            date?.let {
-//                this.findNavController()
-//                    .navigate(QuoteInterventionDatesFragmentDirections.(it))
-//                viewModel.doneGoToInterventionDetail()
-//            }
-//        })
+        viewModel.interventionDateToFill.observe(viewLifecycleOwner, Observer { date ->
+            date?.let {
+                this.findNavController().navigate(
+                    QuoteInterventionDatesFragmentDirections.actionQuoteInterventionDatesFragmentToQuoteInterventionsFragment(
+                        QuoteInterventionsParams(
+                            arguments.params.quoteId,
+                            it
+                        )
+                    )
+                )
+                viewModel.doneGoToInterventionDetail()
+            }
+        })
     }
 }

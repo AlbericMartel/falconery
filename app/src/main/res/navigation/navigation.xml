@@ -74,5 +74,16 @@
         <action
             android:id="@+id/action_quoteInterventionDatesFragment_to_quotesFragment"
             app:destination="@id/quotesFragment" />
+        <action
+            android:id="@+id/action_quoteInterventionDatesFragment_to_quoteInterventionsFragment"
+            app:destination="@id/quoteInterventionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quoteInterventionsFragment"
+        android:name="am.falconry.quote.interventions.QuoteInterventionsFragment"
+        android:label="QuoteInterventionsFragment" >
+        <argument
+            android:name="params"
+            app:argType="am.falconry.quote.interventions.QuoteInterventionsParams" />
     </fragment>
 </navigation>
